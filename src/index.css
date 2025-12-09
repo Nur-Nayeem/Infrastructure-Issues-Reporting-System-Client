@@ -2,15 +2,15 @@
 @import "tailwindcss";
 @theme {
   /* --color-*: initial; */
-  --color-primary: #2563eb;
-  --color-secondary: #1e293b;
-  --color-accent: #f59e0b;
+  --color-primary: #a855f7;
+  --color-secondary: #10b981;
+  --color-accent: #d97706;
   --font-display: "Lora", "serif";
   --font-body: "Inter", "sans-serif";
   --font-sans: "Poppins", "sans-serif";
-  --color-background-light: #f9fafb;
-  --color-background-dark: #0f172a;
-  --color-surface-dark: #1e293b;
+  --color-background-light: #f6f7f8;
+  --color-background-dark: #0d0d10;
+  --color-surface-dark: #1a1a1e;
 }
 
 .nav-styles {
