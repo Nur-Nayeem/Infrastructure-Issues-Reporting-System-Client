@@ -1,8 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lora:ital,wght@0,400..700;1,400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import "tailwindcss";
 @theme {
-  /* --color-*: initial; */
-  --color-primary: #a855f7;
+  --color-primary: #f91942;
   --color-secondary: #10b981;
   --color-accent: #d97706;
   --font-display: "Lora", "serif";
@@ -14,9 +13,9 @@
 }
 
 .nav-styles {
-  @apply text-sm font-medium leading-normal transition-colors text-slate-300 hover:text-primary;
+  @apply text-sm font-medium leading-normal transition-colors text-slate-400 hover:text-slate-200;
 }
 
 .active {
-  @apply text-primary;
+  @apply text-slate-200;
 }

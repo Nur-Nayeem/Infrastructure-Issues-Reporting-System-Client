@@ -9,7 +9,7 @@ const Navbar = () => {
     { to: "/how-it-works", label: "How It Works" },
   ];
   return (
-    <div className="flex items-center justify-between w-full max-w-7xl">
+    <div className="flex items-center justify-between w-full container">
       <Link to="/" className="flex items-center gap-3 text-white">
         <div className="size-8 text-primary">
           <svg
@@ -47,7 +47,7 @@ const Navbar = () => {
         <div className="relative group">
           <button className="flex items-center gap-2 outline-none">
             <img
-              className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-slate-700 group-hover:border-primary transition"
+              className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-slate-700 group-hover:border-slate-300 transition"
               src="https://avatars.githubusercontent.com/u/109820227?v=4"
             />
           </button>
@@ -59,12 +59,12 @@ const Navbar = () => {
               <div className="border-t border-slate-800"></div>
               <Link
                 to="/dashboard"
-                className="flex items-center gap-3 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800/50 hover:text-primary"
+                className="flex items-center gap-3 px-4 py-2 text-sm text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
               >
                 <MdDashboard className="text-base" />
                 <span>Dashboard</span>
               </Link>
-              <button className="flex w-full items-center gap-3 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800/50 hover:text-primary">
+              <button className="flex w-full items-center gap-3 px-4 py-2 text-sm text-slate-400 hover:bg-slate-800/50 hover:text-slate-200">
                 <MdLogout className="text-base" />
                 <span>Logout</span>
               </button>
