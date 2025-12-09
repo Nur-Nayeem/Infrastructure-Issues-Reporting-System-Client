@@ -9,7 +9,7 @@ const LatestSolvedIssueCard = ({ issue }) => {
         <img
           src={issue.img}
           alt="issue image"
-          className="sm:w-1/3 w-full h-44"
+          className="sm:w-2/5 w-full h-48"
         />
 
         <div className="flex flex-1 flex-col justify-between p-4">
