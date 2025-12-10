@@ -2,10 +2,10 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer class="bg-background-dark border-t border-slate-800">
-      <div class="container mx-auto overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
-        <div class="flex items-center justify-center gap-3 text-white mb-8">
-          <div class="size-8 text-primary">
+    <footer className="bg-background-dark border-t border-slate-800">
+      <div className="container mx-auto overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
+        <div className="flex items-center justify-center gap-3 text-white mb-8">
+          <div className="size-8 text-primary">
             <svg
               fill="none"
               stroke="currentColor"
@@ -21,69 +21,69 @@ const Footer = () => {
               <circle cx="12" cy="5" r="4"></circle>
             </svg>
           </div>
-          <h2 class="text-white text-xl font-display font-semibold tracking-wide">
+          <h2 className="text-white text-xl font-display font-semibold tracking-wide">
             CivicResolve
           </h2>
         </div>
         <nav
           aria-label="Footer"
-          class="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12"
+          className="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12"
         >
-          <div class="pb-6 text-center">
+          <div className="pb-6 text-center">
             <a
-              class="text-sm leading-6 text-slate-400 hover:text-white"
+              className="text-sm leading-6 text-slate-400 hover:text-white"
               href="#"
             >
               Home
             </a>
           </div>
-          <div class="pb-6 text-center">
+          <div className="pb-6 text-center">
             <a
-              class="text-sm leading-6 text-slate-400 hover:text-white"
+              className="text-sm leading-6 text-slate-400 hover:text-white"
               href="#"
             >
               All Issues
             </a>
           </div>
-          <div class="pb-6 text-center">
+          <div className="pb-6 text-center">
             <a
-              class="text-sm leading-6 text-slate-400 hover:text-white"
+              className="text-sm leading-6 text-slate-400 hover:text-white"
               href="#"
             >
               Features
             </a>
           </div>
-          <div class="pb-6 text-center">
+          <div className="pb-6 text-center">
             <a
-              class="text-sm leading-6 text-slate-400 hover:text-white"
+              className="text-sm leading-6 text-slate-400 hover:text-white"
               href="#"
             >
               FAQ
             </a>
           </div>
-          <div class="pb-6 text-center">
+          <div className="pb-6 text-center">
             <a
-              class="text-sm leading-6 text-slate-400 hover:text-white"
+              className="text-sm leading-6 text-slate-400 hover:text-white"
               href="#"
             >
               Contact Us
             </a>
           </div>
-          <div class="pb-6 text-center">
+          <div className="pb-6 text-center">
             <a
-              class="text-sm leading-6 text-slate-400 hover:text-white"
+              className="text-sm leading-6 text-slate-400 hover:text-white"
               href="#"
             >
               Privacy Policy
             </a>
           </div>
         </nav>
-        <div class="mt-10 flex justify-center space-x-10">
-          <a class="text-slate-500 hover:text-primary" href="#">
-            <span class="sr-only">Facebook</span>
+        <div className="mt-10 flex justify-center space-x-10">
+          <a className="text-slate-500 hover:text-primary" href="#">
+            <span className="sr-only">Facebook</span>
             <svg
               aria-hidden="true"
-              class="h-6 w-6"
+              className="h-6 w-6"
               fill="currentColor"
               viewBox="0 0 24 24"
             >
@@ -94,22 +94,22 @@ const Footer = () => {
               ></path>
             </svg>
           </a>
-          <a class="text-slate-500 hover:text-primary" href="#">
-            <span class="sr-only">Twitter</span>
+          <a className="text-slate-500 hover:text-primary" href="#">
+            <span className="sr-only">Twitter</span>
             <svg
               aria-hidden="true"
-              class="h-6 w-6"
+              className="h-6 w-6"
               fill="currentColor"
               viewBox="0 0 24 24"
             >
               <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path>
             </svg>
           </a>
-          <a class="text-slate-500 hover:text-primary" href="#">
-            <span class="sr-only">GitHub</span>
+          <a className="text-slate-500 hover:text-primary" href="#">
+            <span className="sr-only">GitHub</span>
             <svg
               aria-hidden="true"
-              class="h-6 w-6"
+              className="h-6 w-6"
               fill="currentColor"
               viewBox="0 0 24 24"
             >
@@ -121,7 +121,7 @@ const Footer = () => {
             </svg>
           </a>
         </div>
-        <p class="mt-10 text-center text-xs leading-5 text-slate-500">
+        <p className="mt-10 text-center text-xs leading-5 text-slate-500">
           © 2024 CivicResolve. All rights reserved.
         </p>
       </div>

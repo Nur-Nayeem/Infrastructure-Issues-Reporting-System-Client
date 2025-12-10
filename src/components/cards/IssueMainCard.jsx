@@ -1,6 +1,7 @@
 import React from "react";
 import { FaThumbsUp } from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
+import { Link } from "react-router";
 
 const IssueMainCard = ({ issue }) => {
   return (
@@ -60,12 +61,12 @@ const IssueMainCard = ({ issue }) => {
               </span>
             </button>
           </div>
-          <a
+          <Link
             className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white bg-primary/20 hover:bg-primary/40 border border-primary/30 transition-colors"
-            href="#"
+            to={`/all-issues/2`}
           >
             View Details
-          </a>
+          </Link>
         </div>
       </div>
     </div>
