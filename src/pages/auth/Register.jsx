@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BiLock } from "react-icons/bi";
 import { BsPerson } from "react-icons/bs";
 import { GoPerson } from "react-icons/go";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { MdAlternateEmail, MdOutlineFileUpload } from "react-icons/md";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import ErrorInput from "../../components/AuthComponents/ErrorComponent";
+import { imageUpload } from "../../lib";
+import { AuthContext } from "../../context/Contexts";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const {
@@ -20,25 +23,39 @@ const Register = () => {
 
   const [showPass, setShowPass] = useState(false);
   const [preview, setPreview] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { createUser, updateUserProfile, authLoading } = use(AuthContext);
+  const navigate = useNavigate();
 
   // Image preview only
   const handlePhoto = (e) => {
     const file = e.target.files[0];
     if (file) {
       setPreview(URL.createObjectURL(file));
-      setError("");
     }
   };
 
   const onSubmit = async (data) => {
+    setError("");
     const { name, image, email, password } = data;
     const imageFile = image ? image[0] : null;
 
     console.log({ name, email, password, imageFile });
 
     //logic
+    try {
+      const imageURL = await imageUpload(imageFile);
+      const result = await createUser(email, password);
+      await updateUserProfile(name, imageURL);
+      navigate("/");
+      toast.success("Signup Successful");
+
+      console.log(result);
+    } catch (err) {
+      setError(err);
+      console.log(err);
+      toast.error(err?.message);
+    }
   };
 
   return (
@@ -175,10 +192,10 @@ const Register = () => {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={authLoading}
             className="w-full py-4 rounded-lg bg-primary hover:bg-red-600 text-white font-bold shadow-lg shadow-primary/30 transition"
           >
-            {loading ? "Creating..." : "Create Account"}
+            {authLoading ? "Creating..." : "Create Account"}
           </button>
         </form>
 

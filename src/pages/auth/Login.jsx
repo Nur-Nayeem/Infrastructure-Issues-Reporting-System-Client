@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BiLock } from "react-icons/bi";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { MdAlternateEmail } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router"; // Use react-router-dom
+import { Link, useNavigate } from "react-router"; // Use react-router-dom
 import ErrorInput from "../../components/AuthComponents/ErrorComponent";
+import { AuthContext } from "../../context/Contexts";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const {
@@ -16,18 +18,37 @@ const Login = () => {
     mode: "onChange",
     criteriaMode: "all",
   });
-
+  const { loginUser, signWithGoogle, authLoading } = use(AuthContext);
+  const navigate = useNavigate();
   const [showPass, setShowPass] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const onSubmit = async (data) => {
-    const { name, image, email, password } = data;
-    const imageFile = image ? image[0] : null;
+    const { email, password } = data;
 
-    console.log({ name, email, password, imageFile });
+    console.log({ email, password });
+    try {
+      await loginUser(email, password);
+      navigate("/");
+      toast.success("Login Successful");
+    } catch (err) {
+      setError(err);
+      toast.error(err?.message);
+    }
 
     //logic
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await signWithGoogle();
+      navigate("/");
+      toast.success("Login Successful");
+    } catch (err) {
+      setError(err);
+      console.log(err);
+      toast.error(err?.message);
+    }
   };
 
   return (
@@ -104,10 +125,10 @@ const Login = () => {
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={authLoading}
           className="w-full flex justify-center p-4 border border-transparent rounded-lg font-bold text-white bg-primary hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-primary/30"
         >
-          {loading ? "Signing in..." : "Sign in to account"}
+          {authLoading ? "Signing in..." : "Sign in to account"}
         </button>
       </form>
 
@@ -123,6 +144,7 @@ const Login = () => {
       </div>
 
       <button
+        onClick={handleGoogleSignIn}
         type="button"
         className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-slate-600 rounded-lg bg-surface-dark hover:bg-slate-700 text-slate-200 transition-colors font-medium shadow-md"
       >

@@ -1,25 +1,31 @@
 import React from "react";
-import { MdOutlineAddTask, MdOutlineInsights } from "react-icons/md";
+import {
+  MdAddAPhoto,
+  MdOutlineAddTask,
+  MdOutlineInsights,
+  MdOutlineRoute,
+} from "react-icons/md";
 import ProcessCard from "../cards/ProcessCard";
 import { HiOutlinePresentationChartLine } from "react-icons/hi";
+import { HiOutlineBellAlert } from "react-icons/hi2";
 const WorkProcess = [
   {
     id: 1,
     title: "1. Submit with Ease",
     desc: "Capture the issue, add details, and submit your report through our intuitive platform.",
-    icon: <MdOutlineAddTask className="text-3xl" />,
+    icon: <MdAddAPhoto className="text-3xl" />,
   },
   {
     id: 2,
     title: "2. Smart Dispatch",
     desc: "Our system intelligently routes your report to the appropriate municipal department.",
-    icon: <HiOutlinePresentationChartLine className="text-3xl" />,
+    icon: <MdOutlineRoute className="text-3xl" />,
   },
   {
     id: 3,
-    title: "3. Track &amp; Resolve",
+    title: "3. Track & Resolve",
     desc: " Receive real-time updates and a final notification when the issue is resolved.",
-    icon: <MdOutlineInsights className="text-3xl" />,
+    icon: <HiOutlineBellAlert className="text-3xl" />,
   },
 ];
 
