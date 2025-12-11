@@ -8,14 +8,14 @@
   --font-body: "Inter", "sans-serif";
   --font-sans: "Poppins", "sans-serif";
   --color-background-light: #f6f7f8;
-  --color-background-dark: #0d0d10;
-  --color-surface-dark: #1a1a1e;
+  --color-background-dark: #111827; /* Tailwind's slate-900 or slightly darker */
+  --color-surface-dark: #1f2937; /* Tailwind's slate-800 or slightly lighter */
 }
 
 .nav-styles {
-  @apply text-sm font-medium leading-normal transition-colors text-slate-400 hover:text-slate-200;
+  @apply text-sm font-medium leading-normal transition-colors text-slate-300 hover:text-white;
 }
 
 .active {
-  @apply text-slate-200;
+  @apply text-white font-semibold;
 }

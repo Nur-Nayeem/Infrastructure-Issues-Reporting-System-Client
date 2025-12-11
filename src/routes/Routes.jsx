@@ -4,6 +4,9 @@ import MainLayout from "../layouts/MainLayout";
 import IssuePage from "../pages/IssuesPage/IssuePage";
 import IssueDetails from "../pages/IssueDetailsPage/IssueDetails";
 import IssueDetailsPage from "../pages/IssueDetailsPage/TestDetails";
+import Register from "../pages/auth/Register";
+import Login from "../pages/auth/Login";
+import AuthLayout from "../layouts/AuthLayout";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +28,20 @@ const router = createBrowserRouter([
       {
         path: "details",
         element: <IssueDetailsPage />,
+      },
+    ],
+  },
+  {
+    path: "/",
+    Component: AuthLayout,
+    children: [
+      {
+        path: "login",
+        Component: Login,
+      },
+      {
+        path: "register",
+        Component: Register,
       },
     ],
   },
