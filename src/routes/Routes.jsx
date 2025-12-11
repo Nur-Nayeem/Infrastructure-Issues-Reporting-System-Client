@@ -7,6 +7,7 @@ import IssueDetailsPage from "../pages/IssueDetailsPage/TestDetails";
 import Register from "../pages/auth/Register";
 import Login from "../pages/auth/Login";
 import AuthLayout from "../layouts/AuthLayout";
+import DashboardLayout from "../layouts/DashBoardLayout";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
         Component: Register,
       },
     ],
+  },
+  {
+    path: "/dashboard",
+    Component: DashboardLayout,
   },
 ]);
 
