@@ -1,0 +1,70 @@
+import React from "react";
+import {
+  FaClipboardList,
+  FaClock,
+  FaCog,
+  FaCheckCircle,
+  FaDollarSign,
+  FaPlus,
+} from "react-icons/fa";
+import { Link } from "react-router";
+import { StatCard } from "../../components/DashBoardComponents/StatCard/StatCard";
+
+export const DashboardPage = () => {
+  // let data are :
+  const stats = [
+    {
+      title: "Total Issues",
+      value: "12",
+      icon: <FaClipboardList />,
+      color: "bg-blue-500/20 text-blue-400",
+    },
+    {
+      title: "Pending",
+      value: "3",
+      icon: <FaClock />,
+      color: "bg-yellow-500/20 text-yellow-400",
+    },
+    {
+      title: "In Progress",
+      value: "2",
+      icon: <FaCog />,
+      color: "bg-orange-500/20 text-orange-400",
+    },
+    {
+      title: "Resolved",
+      value: "7",
+      icon: <FaCheckCircle />,
+      color: "bg-green-500/20 text-green-400",
+    },
+    {
+      title: "Total Payments",
+      value: "৳2,400",
+      icon: <FaDollarSign />,
+      color: "bg-purple-500/20 text-purple-400",
+    },
+  ];
+
+  return (
+    <div>
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+        <h1 className="text-2xl font-bold text-slate-100">
+          Dashboard Overview
+        </h1>
+        <Link
+          to="/dashboard/user/report"
+          className="btn-primary inline-flex items-center justify-center gap-2"
+        >
+          <FaPlus /> Report New Issue
+        </Link>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
+        {stats.map((stat, index) => (
+          <StatCard key={index} stat={stat} />
+        ))}
+      </div>
+    </div>
+  );
+};
