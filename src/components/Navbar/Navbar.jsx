@@ -1,5 +1,7 @@
+import { use } from "react";
 import { MdDashboard, MdLogout } from "react-icons/md";
 import { Link, NavLink } from "react-router";
+import { AuthContext } from "../../context/Contexts";
 
 const Navbar = ({ open, setOpen }) => {
   const navLinks = [
@@ -8,6 +10,9 @@ const Navbar = ({ open, setOpen }) => {
     { to: "/features", label: "Features" },
     { to: "/how-it-works", label: "How It Works" },
   ];
+
+  const { user } = use(AuthContext);
+  console.log(user);
 
   return (
     <div className="flex items-center justify-between w-full container">
