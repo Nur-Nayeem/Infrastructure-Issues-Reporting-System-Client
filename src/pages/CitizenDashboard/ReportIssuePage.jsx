@@ -4,38 +4,73 @@ import { useNavigate } from "react-router";
 import { UpgradeNotice } from "../../components/DashBoardComponents/ReportIssues/UpgradeNotice";
 import ImageComponent from "../../components/DashBoardComponents/ReportIssues/ImageComponent";
 import toast from "react-hot-toast";
+import { imageUpload } from "../../lib";
+import useUser from "../../hooks/useUser";
+import useAxios from "../../hooks/useAxios";
 
 export const ReportIssuePage = () => {
   const navigate = useNavigate();
+  const axiosInstance = useAxios();
   const [image, setImage] = useState(null);
+  const [fileImg, setFileImg] = useState(null);
+  const [loadingReport, setLoadingReport] = useState(false);
 
-  // Mocked user subscription
-  const user = {
-    isPremium: true,
-    issuesReported: 2,
-    maxFreeIssues: 3,
-  };
+  const { currentUser, userLoading, refetchUser } = useUser();
 
-  const handleSubmit = (e) => {
+  if (userLoading) return <p>Loading...</p>;
+  if (!currentUser) return <p>No user found in DB</p>;
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoadingReport(true);
 
-    if (!user.isPremium && user.issuesReported >= user.maxFreeIssues) {
+    if (!currentUser?.isPremium && currentUser?.issuesReported >= 3) {
       toast.error(
         "Free users can only report 3 issues. Please upgrade to premium."
       );
       return;
     }
 
+    if (!fileImg) {
+      toast.error("Please select an image.");
+      return;
+    }
+
+    const img = await imageUpload(fileImg);
+    if (!img) {
+      toast.error("Image upload failed. Try again.");
+      return;
+    }
+
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData);
 
-    if (image) data.image = image;
+    const IssueData = {
+      ...data,
+      image: img,
+      reported_by: currentUser.email,
+    };
 
-    console.log(data);
+    try {
+      const res = await axiosInstance.post("/issues", IssueData);
+      if (res.data) {
+        toast.success("Issue reported successfully");
+
+        // Refetch user data
+        await refetchUser();
+        setLoadingReport(false);
+        // Navigate to my issues page
+        navigate("/dashboard/user/my-issues");
+      }
+    } catch (error) {
+      setLoadingReport(false);
+      toast.error("Failed to report issue", error);
+    }
   };
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
+    setFileImg(file);
     if (file) setImage(URL.createObjectURL(file));
   };
 
@@ -46,14 +81,14 @@ export const ReportIssuePage = () => {
       </h1>
 
       {/* Subscription Notice */}
-      {!user.isPremium && user.issuesReported >= user.maxFreeIssues && (
+      {!currentUser.isPremium && currentUser.issuesReported >= 3 && (
         <UpgradeNotice />
       )}
 
-      {!user.isPremium && user.issuesReported < user.maxFreeIssues && (
+      {!currentUser.isPremium && currentUser.issuesReported < 3 && (
         <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 mb-8">
           <p className="text-blue-300 text-sm">
-            Free issues used: {user.issuesReported} / {user.maxFreeIssues}
+            Free issues used: {currentUser.issuesReported} / 3
           </p>
         </div>
       )}
@@ -148,7 +183,7 @@ export const ReportIssuePage = () => {
             type="submit"
             className="btn-primary inline-flex items-center justify-center cursor-pointer"
           >
-            Submit Issue
+            {loadingReport ? "Submitting..." : "Submit Issue"}
           </button>
         </div>
       </form>
