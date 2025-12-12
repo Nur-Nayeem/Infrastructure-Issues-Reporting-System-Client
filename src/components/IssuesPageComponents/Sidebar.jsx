@@ -8,7 +8,7 @@ const Sidebar = () => {
       <div className="relative">
         <IoSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
         <input
-          className="w-full bg-surface-dark border border-slate-800 rounded-lg py-3 pl-12 pr-4 text-sm text-white placeholder:text-slate-500 outline-0 focus:ring-2 focus:ring-primary focus:border-primary transition"
+          className="w-full bg-surface-dark border border-slate-800 rounded-lg py-3 pl-12 pr-4 text-sm text-white placeholder:text-slate-500 outline-0 focus:ring-1 focus:ring-primary focus:border-primary transition"
           placeholder="Search issues..."
           type="search"
         />
@@ -22,7 +22,7 @@ const Sidebar = () => {
             Category
           </label>
           <select
-            className="w-full bg-surface-dark border border-slate-800 rounded-lg py-2 px-3 text-sm text-white outline-0 focus:ring-2 focus:ring-primary focus:border-primary transition"
+            className="w-full bg-surface-dark border border-slate-800 rounded-lg py-2 px-3 text-sm text-white outline-0 focus:ring-1 focus:ring-primary focus:border-primary transition"
             id="category"
           >
             <option>All Categories</option>
@@ -38,7 +38,7 @@ const Sidebar = () => {
             Status
           </label>
           <select
-            className="w-full bg-surface-dark border border-slate-800 rounded-lg py-2 px-3 text-sm text-white outline-0 focus:ring-2 focus:ring-primary focus:border-primary transition"
+            className="w-full bg-surface-dark border border-slate-800 rounded-lg py-2 px-3 text-sm text-white outline-0 focus:ring-1 focus:ring-primary focus:border-primary transition"
             id="status"
           >
             <option>Any Status</option>
