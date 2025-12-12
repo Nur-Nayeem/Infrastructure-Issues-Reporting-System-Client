@@ -53,20 +53,21 @@ export const MyIssuesPage = () => {
   const getStatusIcon = (status) => {
     switch (status) {
       case "pending":
-        return <FaClock className="text-yellow-500" />;
+        return <FaClock className="text-yellow-400" />;
       case "in-progress":
-        return <FaCog className="text-blue-500" />;
+        return <FaCog className="text-blue-400" />;
       case "resolved":
-        return <FaCheckCircle className="text-green-500" />;
+        return <FaCheckCircle className="text-green-400" />;
       default:
-        return <FaTimesCircle className="text-red-500" />;
+        return <FaTimesCircle className="text-red-400" />;
     }
   };
 
   return (
-    <div>
+    <div className="max-w-7xl mx-auto p-6">
+      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
-        <h1 className="text-2xl font-bold text-slate-100">My Issues</h1>
+        <h1 className="text-3xl font-bold text-slate-100">My Issues</h1>
         <Link
           to="/dashboard/user/report"
           className="btn-primary inline-flex items-center justify-center gap-2"
@@ -76,24 +77,25 @@ export const MyIssuesPage = () => {
       </div>
 
       {/* Filters and Search */}
-      <div className="bg-surface-dark rounded-xl p-4 border border-slate-800 mb-6">
-        <div className="flex justify-between items-center">
-          <div className="relative max-w-md w-full">
-            <FaSearch className="absolute left-3 top-3 text-slate-500" />
+      <div className="bg-surface-dark rounded-2xl p-5 border border-slate-800 mb-6 shadow-inner">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between md:gap-4">
+          <div className="relative w-full md:max-w-md mb-3 md:mb-0">
+            <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
             <input
               type="text"
               placeholder="Search issues..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-3 py-2 bg-background-dark rounded-lg border border-slate-700 text-slate-100"
+              className="input-box"
             />
           </div>
-          <div className="flex items-center gap-4 max-w-md w-full">
-            <FaFilter className="text-slate-400" />
+
+          <div className="relative w-full md:max-w-sm mb-3 md:mb-0">
+            <FaFilter className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="flex-1 bg-background-dark border border-slate-700 rounded-lg px-3 py-2 text-slate-100 "
+              className="input-box"
             >
               <option value="all">All Status</option>
               <option value="pending">Pending</option>
@@ -105,20 +107,27 @@ export const MyIssuesPage = () => {
       </div>
 
       {/* Issues List */}
-      <div className="space-y-4">
-        {filteredIssues.map((issue) => (
-          <MyIssueCard issue={issue} getStatusIcon={getStatusIcon} />
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {filteredIssues.length > 0 ? (
+          filteredIssues.map((issue) => (
+            <MyIssueCard
+              key={issue.id}
+              issue={issue}
+              getStatusIcon={getStatusIcon}
+            />
+          ))
+        ) : (
+          <div className="col-span-full text-center py-16 bg-surface-dark rounded-2xl border border-slate-800">
+            <p className="text-slate-400 mb-4">No issues found</p>
+            <Link
+              to="/dashboard/user/report"
+              className="btn-primary inline-flex items-center justify-center gap-2"
+            >
+              <FaPlus /> Report Your First Issue
+            </Link>
+          </div>
+        )}
       </div>
-
-      {filteredIssues.length === 0 && (
-        <div className="text-center py-12">
-          <div className="text-slate-400 mb-4">No issues found</div>
-          <Link to="/dashboard/report" className="btn-primary">
-            Report Your First Issue
-          </Link>
-        </div>
-      )}
     </div>
   );
 };

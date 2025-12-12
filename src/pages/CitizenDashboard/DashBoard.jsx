@@ -11,7 +11,6 @@ import { Link } from "react-router";
 import { StatCard } from "../../components/DashBoardComponents/StatCard/StatCard";
 
 export const DashboardPage = () => {
-  // let data are :
   const stats = [
     {
       title: "Total Issues",
@@ -46,21 +45,22 @@ export const DashboardPage = () => {
   ];
 
   return (
-    <div>
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
-        <h1 className="text-2xl font-bold text-slate-100">
+    <div className="max-w-7xl mx-auto p-6">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+        <h1 className="text-3xl font-bold text-slate-100">
           Dashboard Overview
         </h1>
         <Link
           to="/dashboard/user/report"
-          className="btn-primary inline-flex items-center justify-center gap-2"
+          className="btn-primary inline-flex items-center justify-center gap-2 py-2 px-4 rounded-lg shadow hover:bg-primary/80 transition"
         >
           <FaPlus /> Report New Issue
         </Link>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
           <StatCard key={index} stat={stat} />
         ))}
