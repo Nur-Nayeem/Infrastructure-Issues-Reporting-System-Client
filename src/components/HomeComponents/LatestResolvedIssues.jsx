@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import LatestSolvedIssueCard from "../cards/IssueSolveCard";
+import axios from "axios";
+import IssueMainCard from "../cards/IssueMainCard";
 
 const ISSUES_DATA = [
   {
@@ -75,6 +77,13 @@ const ISSUES_DATA = [
 ];
 
 const LatestResolvedIssues = () => {
+  const [latesSolved, setLatesSolved] = useState([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/issues?status=Resolved&limit=6")
+      .then((res) => setLatesSolved(res.data))
+      .catch((err) => console.log(err));
+  }, []);
   return (
     <div className="py-16">
       <div className="text-center mb-12">
@@ -86,9 +95,9 @@ const LatestResolvedIssues = () => {
           reports.
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {ISSUES_DATA.map((issue) => (
-          <LatestSolvedIssueCard key={issue.id} issue={issue} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {latesSolved.map((issue) => (
+          <IssueMainCard key={issue.id} issue={issue} />
         ))}
       </div>
     </div>

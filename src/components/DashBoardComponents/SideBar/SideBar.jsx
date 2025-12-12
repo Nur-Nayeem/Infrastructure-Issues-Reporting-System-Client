@@ -10,16 +10,27 @@ import { Logo } from "../../Navbar/Navbar";
 import { NavLinkItem } from "./NavLink";
 
 const SideBar = ({ setSidebarOpen, sidebarOpen, user }) => {
-  const menuItems = [
-    { path: "/dashboard/user-state", label: "Dashboard", icon: <FaChartBar /> },
-    {
-      path: "/dashboard/user/my-issues",
-      label: "My Issues",
-      icon: <FaList />,
-    },
-    { path: "/dashboard/user/report", label: "Report Issue", icon: <FaPlus /> },
-    { path: "/dashboard/user/profile", label: "Profile", icon: <FaUser /> },
-  ];
+  let menuItems;
+  if (user?.role === "citizen") {
+    menuItems = [
+      {
+        path: "/dashboard/user-state",
+        label: "Dashboard",
+        icon: <FaChartBar />,
+      },
+      {
+        path: "/dashboard/user/my-issues",
+        label: "My Issues",
+        icon: <FaList />,
+      },
+      {
+        path: "/dashboard/user/report",
+        label: "Report Issue",
+        icon: <FaPlus />,
+      },
+      { path: "/dashboard/user/profile", label: "Profile", icon: <FaUser /> },
+    ];
+  }
 
   const handleLogout = () => {};
 
@@ -49,15 +60,18 @@ const SideBar = ({ setSidebarOpen, sidebarOpen, user }) => {
             </div>
             <div>
               <h3 className="font-semibold text-slate-100 truncate">
-                {user.name}
+                {user?.displayName.split(" ")[0]}
               </h3>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-400">{user.email}</span>
-                {user.isPremium && (
+                <span className="text-xs text-slate-400 break-all">
+                  {user?.email}
+                </span>
+
+                {user?.isPremium && (
                   <span
                     className={`px-2 py-0.5 text-xs font-bold bg-yellow-600 text-yellow-100 rounded-full`}
                   >
-                    {user.subscription}
+                    Premium
                   </span>
                 )}
               </div>
@@ -67,7 +81,7 @@ const SideBar = ({ setSidebarOpen, sidebarOpen, user }) => {
 
         {/*nav list */}
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-          {menuItems.map((item) => (
+          {menuItems?.map((item) => (
             <NavLinkItem
               key={item.path}
               item={item}

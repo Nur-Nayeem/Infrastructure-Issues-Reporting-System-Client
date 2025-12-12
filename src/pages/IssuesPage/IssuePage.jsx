@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import IssueMainCard from "../../components/cards/IssueMainCard";
 import Sidebar from "../../components/IssuesPageComponents/Sidebar";
-import { issues } from "../../data/Issues";
+import axios from "axios";
 
 const IssuePage = () => {
+  const [issues, setIssues] = useState([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/issues")
+      .then((res) => setIssues(res.data))
+      .catch((err) => console.log(err));
+  }, []);
   return (
     <main className="flex-1 w-full container mx-auto px-2.5 sm:px-0 py-12">
       <div className="flex flex-col lg:flex-row gap-12">
