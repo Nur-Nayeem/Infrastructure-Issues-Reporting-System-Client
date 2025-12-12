@@ -10,8 +10,10 @@ import ErrorInput from "../../components/AuthComponents/ErrorComponent";
 import { imageUpload } from "../../lib";
 import { AuthContext } from "../../context/Contexts";
 import toast from "react-hot-toast";
+import useAxios from "../../hooks/useAxios";
 
 const Register = () => {
+  const axiosInstance = useAxios();
   const {
     register,
     handleSubmit,
@@ -24,7 +26,8 @@ const Register = () => {
   const [showPass, setShowPass] = useState(false);
   const [preview, setPreview] = useState(null);
   const [error, setError] = useState("");
-  const { createUser, updateUserProfile, authLoading } = use(AuthContext);
+  const { createUser, updateUserProfile } = use(AuthContext);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   // Image preview only
@@ -37,22 +40,34 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     setError("");
+    setLoading(true);
     const { name, image, email, password } = data;
-    const imageFile = image ? image[0] : null;
+    const imageFile = image && image.length > 0 ? image[0] : null;
 
-    console.log({ name, email, password, imageFile });
+    if (!imageFile) {
+      toast.error("Please upload a profile photo");
+      return;
+    }
 
-    //logic
     try {
       const imageURL = await imageUpload(imageFile);
-      const result = await createUser(email, password);
+
+      await createUser(email, password);
       await updateUserProfile(name, imageURL);
+
+      const userDetails = {
+        email,
+        displayName: name,
+        photoURL: imageURL,
+      };
+
+      await axiosInstance.post("/users", userDetails);
+      setLoading(false);
       navigate("/");
       toast.success("Signup Successful");
-
-      console.log(result);
     } catch (err) {
       setError(err);
+      setLoading(false);
       console.log(err);
       toast.error(err?.message);
     }
@@ -97,8 +112,9 @@ const Register = () => {
                 type="file"
                 accept="image/*"
                 className="hidden"
-                {...register("image")}
-                onChange={handlePhoto}
+                {...register("image", {
+                  onChange: (e) => handlePhoto(e),
+                })}
               />
             </div>
             <span className="text-xs text-slate-400 mt-2">
@@ -192,10 +208,10 @@ const Register = () => {
 
           <button
             type="submit"
-            disabled={authLoading}
+            disabled={loading}
             className="w-full py-4 rounded-lg bg-primary hover:bg-red-600 text-white font-bold shadow-lg shadow-primary/30 transition"
           >
-            {authLoading ? "Creating..." : "Create Account"}
+            {loading ? "Creating..." : "Create Account"}
           </button>
         </form>
 

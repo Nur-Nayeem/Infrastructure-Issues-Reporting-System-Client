@@ -8,8 +8,10 @@ import { Link, useNavigate } from "react-router"; // Use react-router-dom
 import ErrorInput from "../../components/AuthComponents/ErrorComponent";
 import { AuthContext } from "../../context/Contexts";
 import toast from "react-hot-toast";
+import useAxios from "../../hooks/useAxios";
 
 const Login = () => {
+  const axiosInstance = useAxios();
   const {
     register,
     handleSubmit,
@@ -41,9 +43,22 @@ const Login = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      await signWithGoogle();
-      navigate("/");
-      toast.success("Login Successful");
+      const res = await signWithGoogle();
+      const userInfo = {
+        email: res.user.email,
+        displayName: res.user.displayName,
+        photoURL: res.user.photoURL,
+      };
+      axiosInstance
+        .post("/users", userInfo)
+        .then((res) => {
+          toast.success("login succefull");
+          console.log("user data has been stored", res.data);
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } catch (err) {
       setError(err);
       console.log(err);
