@@ -34,8 +34,10 @@ const Login = () => {
       navigate("/");
       toast.success("Login Successful");
     } catch (err) {
-      setError(err);
-      toast.error(err?.message);
+      const message =
+        err?.response?.data?.message || err?.message || "Login failed";
+      setError(message);
+      toast.error(message);
     }
 
     //logic
@@ -60,9 +62,10 @@ const Login = () => {
           console.log(error);
         });
     } catch (err) {
-      setError(err);
-      console.log(err);
-      toast.error(err?.message);
+      const message =
+        err?.response?.data?.message || err?.message || "Google login failed";
+      setError(message);
+      toast.error(message);
     }
   };
 

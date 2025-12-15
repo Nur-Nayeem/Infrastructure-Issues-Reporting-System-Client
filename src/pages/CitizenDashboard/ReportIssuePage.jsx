@@ -108,7 +108,7 @@ export const ReportIssuePage = () => {
               <input
                 name="title"
                 required
-                className="w-full bg-background-dark/60 border border-slate-800 rounded-lg p-3 text-sm text-white outline-0 focus:ring-1 focus:ring-primary focus:border-primary transition"
+                className="input-box"
                 placeholder="Title of the Issue"
               />
             </div>
@@ -121,7 +121,7 @@ export const ReportIssuePage = () => {
                 name="description"
                 rows={4}
                 required
-                className="w-full bg-background-dark/60 border border-slate-800 rounded-lg p-3 text-sm text-white outline-0 focus:ring-1 focus:ring-primary focus:border-primary transition"
+                className="input-box"
                 placeholder="Describe the issue in detail..."
               ></textarea>
             </div>
@@ -131,11 +131,7 @@ export const ReportIssuePage = () => {
                 <label className="text-sm text-slate-300 mb-1 block">
                   Category *
                 </label>
-                <select
-                  name="category"
-                  required
-                  className="w-full bg-background-dark/60 border border-slate-800 rounded-lg p-3 text-sm text-white outline-0 focus:ring-1 focus:ring-primary focus:border-primary transition"
-                >
+                <select name="category" required className="input-box">
                   <option value="">Select Category</option>
                   <option value="infrastructure">Infrastructure</option>
                   <option value="sanitation">Sanitation</option>
@@ -150,12 +146,7 @@ export const ReportIssuePage = () => {
                 </label>
                 <div className="relative">
                   <FaMapMarkerAlt className="absolute left-3 top-3.5 text-slate-500" />
-                  <input
-                    name="location"
-                    required
-                    className="w-full bg-background-dark/60 border border-slate-800 rounded-lg p-3 px-8 text-sm text-white outline-0 focus:ring-1 focus:ring-primary focus:border-primary transition"
-                    placeholder="Enter location"
-                  />
+                  <input name="location" required className="input-box" />
                 </div>
               </div>
             </div>

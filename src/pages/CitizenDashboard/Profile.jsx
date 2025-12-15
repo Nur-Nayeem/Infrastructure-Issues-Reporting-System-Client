@@ -64,7 +64,9 @@ export const ProfilePage = () => {
         photoURL: img,
       };
 
-      await updateUserProfile(data.name, img);
+      if (data.name || img) {
+        await updateUserProfile(data.name, img);
+      }
 
       await axiosInstance.patch(
         `/users/update/${currentUser.email}`,
@@ -158,8 +160,8 @@ export const ProfilePage = () => {
                   <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input
                     name="name"
+                    placeholder="Name"
                     defaultValue={user.name}
-                    required
                     className="input-box"
                   />
                 </div>
@@ -174,8 +176,9 @@ export const ProfilePage = () => {
                   <input
                     name="email"
                     type="email"
+                    placeholder="Email"
+                    disabled
                     defaultValue={user.email}
-                    required
                     className="input-box"
                   />
                 </div>
@@ -224,43 +227,46 @@ export const ProfilePage = () => {
         </div>
 
         {/* Subscription / Stats */}
-        <div className="space-y-6">
-          {/* Subscription Card */}
-          <div className="bg-surface-dark rounded-2xl border border-slate-800 p-6 shadow-lg">
-            <div className="flex items-center gap-4 mb-4">
-              <div
-                className={`p-3 rounded-full ${
-                  user.isPremium ? "bg-green-500/20" : "bg-slate-800"
-                }`}
-              >
-                {user.isPremium ? (
-                  <FaCheckCircle className="text-green-400" />
-                ) : (
-                  <FaLock className="text-slate-400" />
-                )}
-              </div>
-              <div>
-                <h3 className="font-semibold text-slate-100">Subscription</h3>
-                <p
-                  className={`text-sm ${
-                    user.isPremium ? "text-green-400" : "text-slate-400"
+
+        {!user.role === "admin" && (
+          <div className="space-y-6">
+            {/* Subscription Card */}
+            <div className="bg-surface-dark rounded-2xl border border-slate-800 p-6 shadow-lg">
+              <div className="flex items-center gap-4 mb-4">
+                <div
+                  className={`p-3 rounded-full ${
+                    user.isPremium ? "bg-green-500/20" : "bg-slate-800"
                   }`}
                 >
-                  {user.isPremium ? "Premium User" : "Free User"}
-                </p>
+                  {user.isPremium ? (
+                    <FaCheckCircle className="text-green-400" />
+                  ) : (
+                    <FaLock className="text-slate-400" />
+                  )}
+                </div>
+                <div>
+                  <h3 className="font-semibold text-slate-100">Subscription</h3>
+                  <p
+                    className={`text-sm ${
+                      user.isPremium ? "text-green-400" : "text-slate-400"
+                    }`}
+                  >
+                    {user.isPremium ? "Premium User" : "Free User"}
+                  </p>
+                </div>
               </div>
+
+              {!user.isPremium && !user.isBlocked ? (
+                <SubscribeCard user={user} />
+              ) : user.isPremium ? (
+                <PremiumUserCard user={user} />
+              ) : null}
             </div>
 
-            {!user.isPremium && !user.isBlocked ? (
-              <SubscribeCard user={user} />
-            ) : user.isPremium ? (
-              <PremiumUserCard user={user} />
-            ) : null}
+            {/* Stats Card */}
+            <StatsCard user={user} currentUser={currentUser} />
           </div>
-
-          {/* Stats Card */}
-          <StatsCard user={user} currentUser={currentUser} />
-        </div>
+        )}
       </div>
     </div>
   );
