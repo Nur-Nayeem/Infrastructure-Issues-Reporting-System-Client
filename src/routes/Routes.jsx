@@ -16,6 +16,7 @@ import DashboardHome from "../pages/DashBoardHome/DashBoardHome";
 import { AdminAllIssuesPage } from "../pages/AdminDashBoard/AdminAllIssuesPage";
 import { AdminManageUsersPage } from "../pages/AdminDashBoard/AdminManageUsersPage";
 import { AdminManageStaffPage } from "../pages/AdminDashBoard/AdminManageStaffPage";
+import AdminPaymentsPage from "../pages/AdminDashBoard/AdminPaymentsPage";
 
 const router = createBrowserRouter([
   {
@@ -100,7 +101,7 @@ const router = createBrowserRouter([
       },
       {
         path: "admin/payments",
-        element: <h2>AdminPaymentsPage</h2>,
+        Component: AdminPaymentsPage,
       },
       {
         path: "admin/profile",
