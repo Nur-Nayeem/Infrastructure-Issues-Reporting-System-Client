@@ -91,7 +91,7 @@ const router = createBrowserRouter([
       },
       {
         path: "admin/manage-users",
-        element: <h2> AdminManageUsersPage</h2>,
+        Component: AdminManageUsersPage,
       },
       {
         path: "admin/manage-staff",
