@@ -14,6 +14,8 @@ const useUser = () => {
     queryKey: ["current-user", user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
+      console.log(user.email);
+
       const res = await axiosInstance.get(`/users/${user.email}`);
       return res.data.user || null;
     },
