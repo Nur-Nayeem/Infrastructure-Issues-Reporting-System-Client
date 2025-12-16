@@ -15,6 +15,7 @@ import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import DashboardHome from "../pages/DashBoardHome/DashBoardHome";
 import { AdminAllIssuesPage } from "../pages/AdminDashBoard/AdminAllIssuesPage";
 import { AdminManageUsersPage } from "../pages/AdminDashBoard/AdminManageUsersPage";
+import { AdminManageStaffPage } from "../pages/AdminDashBoard/AdminManageStaffPage";
 
 const router = createBrowserRouter([
   {
@@ -95,7 +96,7 @@ const router = createBrowserRouter([
       },
       {
         path: "admin/manage-staff",
-        element: <h2>AdminManageStaffPage</h2>,
+        Component: AdminManageStaffPage,
       },
       {
         path: "admin/payments",
