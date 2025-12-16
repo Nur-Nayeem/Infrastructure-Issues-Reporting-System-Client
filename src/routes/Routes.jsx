@@ -13,6 +13,8 @@ import { ReportIssuePage } from "../pages/CitizenDashboard/ReportIssuePage";
 import { ProfilePage } from "../pages/CitizenDashboard/Profile";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import DashboardHome from "../pages/DashBoardHome/DashBoardHome";
+import { AdminAllIssuesPage } from "../pages/AdminDashBoard/AdminAllIssuesPage";
+import { AdminManageUsersPage } from "../pages/AdminDashBoard/AdminManageUsersPage";
 
 const router = createBrowserRouter([
   {
@@ -85,7 +87,23 @@ const router = createBrowserRouter([
       },
       {
         path: "admin/issues",
-        element: <h2>AdminAllIssuesPage</h2>,
+        Component: AdminAllIssuesPage,
+      },
+      {
+        path: "admin/manage-users",
+        element: <h2> AdminManageUsersPage</h2>,
+      },
+      {
+        path: "admin/manage-staff",
+        element: <h2>AdminManageStaffPage</h2>,
+      },
+      {
+        path: "admin/payments",
+        element: <h2>AdminPaymentsPage</h2>,
+      },
+      {
+        path: "admin/profile",
+        Component: ProfilePage,
       },
     ],
   },
