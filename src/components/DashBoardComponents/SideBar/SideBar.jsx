@@ -1,20 +1,26 @@
-import React from "react";
+import React, { use } from "react";
 import {
   FaChartBar,
+  FaCreditCard,
   FaList,
   FaPlus,
   FaSignOutAlt,
   FaUser,
+  FaUsers,
+  FaUserTie,
 } from "react-icons/fa";
-import { Logo } from "../../Navbar/Navbar";
+
 import { NavLinkItem } from "./NavLink";
+import { Logo } from "../../Logo/Logo";
+import { AuthContext } from "../../../context/Contexts";
 
 const SideBar = ({ setSidebarOpen, sidebarOpen, user }) => {
+  const { logOutUSer } = use(AuthContext);
   let menuItems;
   if (user?.role === "citizen") {
     menuItems = [
       {
-        path: "/dashboard/user-state",
+        path: "/dashboard",
         label: "Dashboard",
         icon: <FaChartBar />,
       },
@@ -30,9 +36,50 @@ const SideBar = ({ setSidebarOpen, sidebarOpen, user }) => {
       },
       { path: "/dashboard/user/profile", label: "Profile", icon: <FaUser /> },
     ];
+  } else if (user?.role === "admin") {
+    menuItems = [
+      {
+        path: "/dashboard",
+        label: "Dashboard",
+        icon: <FaChartBar />,
+      },
+      {
+        path: "/dashboard/admin/issues",
+        label: "All Issues",
+        icon: <FaList />,
+      },
+      {
+        path: "/dashboard/admin/manage-users",
+        label: "Manage Users",
+        icon: <FaUsers />,
+      },
+      {
+        path: "/dashboard/admin/manage-staff",
+        label: "Manage Staff",
+        icon: <FaUserTie />,
+      },
+      {
+        path: "/dashboard/admin/payments",
+        label: "Payments",
+        icon: <FaCreditCard />,
+      },
+      { path: "/dashboard/admin/profile", label: "Profile", icon: <FaUser /> },
+    ];
+  } else {
+    menuItems = [
+      { path: "/dashboard", label: "Dashboard", icon: <FaChartBar /> },
+      {
+        path: "/dashboard/staff/assigned-issues",
+        label: "Assigned Issues",
+        icon: <FaList />,
+      },
+      { path: "/dashboard/staff/profile", label: "Profile", icon: <FaUser /> },
+    ];
   }
 
-  const handleLogout = () => {};
+  const handleLogout = () => {
+    logOutUSer();
+  };
 
   return (
     <aside
