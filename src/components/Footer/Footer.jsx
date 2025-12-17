@@ -1,5 +1,6 @@
 import React from "react";
 import { FaFacebook, FaGithub, FaTwitter } from "react-icons/fa";
+import { Link } from "react-router";
 
 const Footer = () => {
   return (
@@ -31,52 +32,52 @@ const Footer = () => {
           className="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12"
         >
           <div className="pb-6 text-center">
-            <a
+            <Link
               className="text-sm leading-6 text-slate-400 hover:text-white"
-              href="#"
+              to="/"
             >
               Home
-            </a>
+            </Link>
           </div>
           <div className="pb-6 text-center">
-            <a
+            <Link
               className="text-sm leading-6 text-slate-400 hover:text-white"
-              href="#"
+              to="/all-issues"
             >
               All Issues
-            </a>
+            </Link>
           </div>
           <div className="pb-6 text-center">
-            <a
+            <Link
               className="text-sm leading-6 text-slate-400 hover:text-white"
               href="#"
             >
               Features
-            </a>
+            </Link>
           </div>
           <div className="pb-6 text-center">
-            <a
+            <Link
               className="text-sm leading-6 text-slate-400 hover:text-white"
               href="#"
             >
               FAQ
-            </a>
+            </Link>
           </div>
           <div className="pb-6 text-center">
-            <a
+            <Link
               className="text-sm leading-6 text-slate-400 hover:text-white"
               href="#"
             >
               Contact Us
-            </a>
+            </Link>
           </div>
           <div className="pb-6 text-center">
-            <a
+            <Link
               className="text-sm leading-6 text-slate-400 hover:text-white"
               href="#"
             >
               Privacy Policy
-            </a>
+            </Link>
           </div>
         </nav>
         <div className="mt-10 flex justify-center space-x-10">

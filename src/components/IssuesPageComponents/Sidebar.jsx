@@ -7,11 +7,7 @@ const Sidebar = () => {
     <div className="sticky top-32 flex flex-col gap-8">
       <div className="relative">
         <IoSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
-        <input
-          className="w-full bg-surface-dark border border-slate-800 rounded-lg py-3 pl-12 pr-4 text-sm text-white placeholder:text-slate-500 outline-0 focus:ring-1 focus:ring-primary focus:border-primary transition"
-          placeholder="Search issues..."
-          type="search"
-        />
+        <input className="input-box" type="search" />
       </div>
       <div className="space-y-6">
         <h3 className="font-display text-lg font-semibold text-white">

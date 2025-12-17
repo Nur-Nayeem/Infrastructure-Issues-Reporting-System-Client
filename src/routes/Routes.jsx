@@ -17,6 +17,7 @@ import { AdminAllIssuesPage } from "../pages/AdminDashBoard/AdminAllIssuesPage";
 import { AdminManageUsersPage } from "../pages/AdminDashBoard/AdminManageUsersPage";
 import { AdminManageStaffPage } from "../pages/AdminDashBoard/AdminManageStaffPage";
 import AdminPaymentsPage from "../pages/AdminDashBoard/AdminPaymentsPage";
+import { StaffAssignedIssuesPage } from "../pages/StaffDashBoard/StaffAssignedIssuesPage";
 
 const router = createBrowserRouter([
   {
@@ -81,7 +82,7 @@ const router = createBrowserRouter([
       },
       {
         path: "staff/assigned-issues",
-        element: <h2>StaffAssignedIssuesPage</h2>,
+        Component: StaffAssignedIssuesPage,
       },
       {
         path: "staff/profile",

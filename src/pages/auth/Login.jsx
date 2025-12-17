@@ -20,20 +20,25 @@ const Login = () => {
     mode: "onChange",
     criteriaMode: "all",
   });
-  const { loginUser, signWithGoogle, authLoading } = use(AuthContext);
+  const { loginUser, signWithGoogle } = use(AuthContext);
+  const [loading, setLoading] = useState(false);
+  const [googleLoading, setGooleLoading] = useState(false);
   const navigate = useNavigate();
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState("");
 
   const onSubmit = async (data) => {
+    setLoading(true);
     const { email, password } = data;
 
     console.log({ email, password });
     try {
       await loginUser(email, password);
       navigate("/");
+      setLoading(false);
       toast.success("Login Successful");
     } catch (err) {
+      setLoading(false);
       const message =
         err?.response?.data?.message || err?.message || "Login failed";
       setError(message);
@@ -44,6 +49,7 @@ const Login = () => {
   };
 
   const handleGoogleSignIn = async () => {
+    setGooleLoading(true);
     try {
       const res = await signWithGoogle();
       const userInfo = {
@@ -56,12 +62,16 @@ const Login = () => {
         .then((res) => {
           toast.success("login succefull");
           console.log("user data has been stored", res.data);
+          setGooleLoading(false);
           navigate("/");
         })
         .catch((error) => {
+          setGooleLoading(false);
+
           console.log(error);
         });
     } catch (err) {
+      setGooleLoading(false);
       const message =
         err?.response?.data?.message || err?.message || "Google login failed";
       setError(message);
@@ -143,10 +153,10 @@ const Login = () => {
 
         <button
           type="submit"
-          disabled={authLoading}
+          disabled={loading}
           className="w-full flex justify-center p-4 border border-transparent rounded-lg font-bold text-white bg-primary hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-primary/30"
         >
-          {authLoading ? "Signing in..." : "Sign in to account"}
+          {loading ? "Signing in..." : "Sign in to account"}
         </button>
       </form>
 
@@ -156,7 +166,7 @@ const Login = () => {
         </div>
         <div className="relative flex justify-center text-sm">
           <span className="px-4 bg-background-dark text-slate-500 uppercase tracking-widest text-xs">
-            Or continue with
+            Or continue with {googleLoading && <span>Signing....</span>}
           </span>
         </div>
       </div>
