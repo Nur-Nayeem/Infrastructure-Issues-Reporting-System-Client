@@ -80,8 +80,8 @@ const LatestResolvedIssues = () => {
   const [latesSolved, setLatesSolved] = useState([]);
   useEffect(() => {
     axios
-      .get("http://localhost:5000/issues?status=Resolved&limit=6")
-      .then((res) => setLatesSolved(res.data))
+      .get("http://localhost:5000/issues?recent=true&limit=6")
+      .then((res) => setLatesSolved(res.data.result))
       .catch((err) => console.log(err));
   }, []);
   return (

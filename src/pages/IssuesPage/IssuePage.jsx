@@ -1,16 +1,51 @@
 import React, { useEffect, useState } from "react";
 import IssueMainCard from "../../components/cards/IssueMainCard";
 import Sidebar from "../../components/IssuesPageComponents/Sidebar";
-import axios from "axios";
+import Pagination from "../../components/IssuesPageComponents/Pagination";
+import useAxios from "../../hooks/useAxios";
 
 const IssuePage = () => {
+  const axiosInstance = useAxios();
   const [issues, setIssues] = useState([]);
+  const { category, setCategory } = useState("");
+  const [loading, setLoading] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
+  // const { scrollYProgress } = useScroll();
+  const limit = 6;
+
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/issues")
-      .then((res) => setIssues(res.data))
-      .catch((err) => console.log(err));
-  }, []);
+    // let categoryQuery = category;
+    // if (category === "All") {
+    //   categoryQuery = "";
+    // }
+    // setLoading(true);
+    axiosInstance
+      .get(
+        `/issues?recent=true&limit=${limit}&skip=${(currentPage - 1) * limit}`
+      )
+      .then((data) => {
+        console.log(data.data.result);
+        setIssues(data.data.result);
+        const page = Math.ceil(data.data.total / limit);
+        setTotalPage(page);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  }, [axiosInstance, category, searchText, currentPage]);
+
+  // const handleCategoryChange = (e) => {
+  //   setCategory(e.target.value);
+  // };
+
+  // const handleSearch = (e) => {
+  //   setSearchText(e.target.value);
+  // };
+
   return (
     <main className="flex-1 w-full container mx-auto px-2.5 sm:px-0 py-12">
       <div className="flex flex-col lg:flex-row gap-12">
@@ -32,7 +67,13 @@ const IssuePage = () => {
               <IssueMainCard key={index} issue={issue} />
             ))}
           </div>
-          <div className="mt-12 flex justify-center">{/* Pagination  */}</div>
+          <div className="mt-12 flex justify-center">
+            <Pagination
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalPage={totalPage}
+            />
+          </div>
         </section>
       </div>
     </main>
