@@ -57,13 +57,13 @@ const IssueMainCard = ({ issue }) => {
             <button className="group flex items-center justify-center h-10 gap-2 px-3 rounded-full bg-slate-800/50 hover:bg-primary/20 border border-slate-700 hover:border-primary/50 transition-colors">
               <FaThumbsUp className="text-slate-400 group-hover:text-primary transition-colors text-xl" />
               <span className="text-base font-semibold text-white">
-                {issue.likes}
+                {issue.upvoted}
               </span>
             </button>
           </div>
           <Link
             className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white bg-primary/20 hover:bg-primary/40 border border-primary/30 transition-colors"
-            to={`/all-issues/2`}
+            to={`/all-issues/${issue._id}`}
           >
             View Details
           </Link>

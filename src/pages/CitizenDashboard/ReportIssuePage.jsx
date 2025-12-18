@@ -48,8 +48,10 @@ export const ReportIssuePage = () => {
     const IssueData = {
       ...data,
       image: img,
-      reported_by: currentUser.email,
+      reportedBy: currentUser.email,
+      userId: currentUser._id,
     };
+    console.log(IssueData);
 
     try {
       const res = await axiosInstance.post("/issues", IssueData);

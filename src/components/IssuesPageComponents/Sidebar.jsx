@@ -2,12 +2,33 @@ import React from "react";
 import { IoSearch } from "react-icons/io5";
 import { MdOutlineRocketLaunch } from "react-icons/md";
 
-const Sidebar = () => {
+const Sidebar = ({
+  category,
+  setCategory,
+  status,
+  setStatus,
+  priority,
+  setPriority,
+  setSearchText,
+}) => {
+  const handleCategoryChange = (e) => {
+    setCategory(e.target.value);
+  };
+  const handleStatusChange = (e) => {
+    setStatus(e.target.value);
+  };
+  const handlePriorityChange = (e) => {
+    setPriority(e.target.value);
+  };
+
+  const handleSearch = (e) => {
+    setSearchText(e.target.value);
+  };
   return (
     <div className="sticky top-32 flex flex-col gap-8">
       <div className="relative">
         <IoSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
-        <input className="input-box" type="search" />
+        <input className="input-box" type="search" onChange={handleSearch} />
       </div>
       <div className="space-y-6">
         <h3 className="font-display text-lg font-semibold text-white">
@@ -18,15 +39,17 @@ const Sidebar = () => {
             Category
           </label>
           <select
+            defaultValue={category}
             className="w-full bg-surface-dark border border-slate-800 rounded-lg py-2 px-3 text-sm text-white outline-0 focus:ring-1 focus:ring-primary focus:border-primary transition"
-            id="category"
+            onChange={handleCategoryChange}
           >
-            <option>All Categories</option>
-            <option>Pothole</option>
-            <option>Streetlight</option>
-            <option>Vandalism</option>
-            <option>Maintenance</option>
-            <option>Water Leak</option>
+            //TODO:category list must be change
+            <option value={"All Categories"}>All Categories</option>
+            <option value={"Pothole"}>Infrastructure</option>
+            <option value={"Streetlight"}>Road</option>
+            <option value={"Vandalism"}>sanitation</option>
+            <option value={"Maintenance"}>Electricity</option>
+            <option value={"Water Leak"}>Water Supply</option>
           </select>
         </div>
         <div className="flex flex-col gap-4">
@@ -34,14 +57,15 @@ const Sidebar = () => {
             Status
           </label>
           <select
+            defaultValue={status}
             className="w-full bg-surface-dark border border-slate-800 rounded-lg py-2 px-3 text-sm text-white outline-0 focus:ring-1 focus:ring-primary focus:border-primary transition"
-            id="status"
+            onChange={handleStatusChange}
           >
-            <option>Any Status</option>
-            <option>Resolved</option>
-            <option>In Progress</option>
-            <option>Pending</option>
-            <option>Closed</option>
+            <option value={"Any Status"}>Any Status</option>
+            <option value={"Resolved"}>Resolved</option>
+            <option value={"In Progress"}>In Progress</option>
+            <option value={"Pending"}>Pending</option>
+            <option value={"Closed"}>Closed</option>
           </select>
         </div>
         <div className="flex flex-col gap-4">
@@ -49,12 +73,13 @@ const Sidebar = () => {
             Priority
           </label>
           <select
+            defaultValue={priority}
             className="w-full bg-surface-dark border border-slate-800 rounded-lg py-2 px-3 text-sm text-white outline-0 focus:ring-2 focus:ring-primary focus:border-primary transition"
-            id="priority"
+            onChange={handlePriorityChange}
           >
-            <option>Any Priority</option>
-            <option>High</option>
-            <option>Normal</option>
+            <option value={"Any Priority"}>Any Priority</option>
+            <option value={"High"}>High</option>
+            <option value={"Low"}>Low</option>
           </select>
         </div>
       </div>

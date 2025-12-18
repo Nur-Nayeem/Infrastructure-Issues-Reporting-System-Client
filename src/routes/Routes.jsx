@@ -3,7 +3,6 @@ import Home from "../pages/Home/Home";
 import MainLayout from "../layouts/MainLayout";
 import IssuePage from "../pages/IssuesPage/IssuePage";
 import IssueDetails from "../pages/IssueDetailsPage/IssueDetails";
-import IssueDetailsPage from "../pages/IssueDetailsPage/TestDetails";
 import Register from "../pages/auth/Register";
 import Login from "../pages/auth/Login";
 import AuthLayout from "../layouts/AuthLayout";
@@ -35,10 +34,6 @@ const router = createBrowserRouter([
       {
         path: "all-issues/:id",
         element: <IssueDetails />,
-      },
-      {
-        path: "details",
-        element: <IssueDetailsPage />,
       },
     ],
   },
@@ -86,7 +81,7 @@ const router = createBrowserRouter([
       },
       {
         path: "staff/profile",
-        element: <h2>StaffProfilePage</h2>,
+        Component: ProfilePage,
       },
       {
         path: "admin/issues",

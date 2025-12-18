@@ -7,7 +7,9 @@ import useAxios from "../../hooks/useAxios";
 const IssuePage = () => {
   const axiosInstance = useAxios();
   const [issues, setIssues] = useState([]);
-  const { category, setCategory } = useState("");
+  const [category, setCategory] = useState("");
+  const [status, setStatus] = useState("");
+  const [priority, setPriority] = useState("");
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,14 +18,15 @@ const IssuePage = () => {
   const limit = 6;
 
   useEffect(() => {
-    // let categoryQuery = category;
-    // if (category === "All") {
-    //   categoryQuery = "";
-    // }
-    // setLoading(true);
+    let categoryQuery = category === "All Categories" ? "" : category;
+    let statusQuery = status === "Any Status" ? "" : status;
+    let priorityQuery = priority === "Any Priority" ? "" : priority;
+    setLoading(true);
     axiosInstance
       .get(
-        `/issues?recent=true&limit=${limit}&skip=${(currentPage - 1) * limit}`
+        `/issues?recent=true&limit=${limit}&skip=${
+          (currentPage - 1) * limit
+        }&category=${categoryQuery}&status=${statusQuery}&priority=${priorityQuery}&search=${searchText}`
       )
       .then((data) => {
         console.log(data.data.result);
@@ -36,21 +39,27 @@ const IssuePage = () => {
         console.log(err);
         setLoading(false);
       });
-  }, [axiosInstance, category, searchText, currentPage]);
+  }, [axiosInstance, category, searchText, currentPage, priority, status]);
 
-  // const handleCategoryChange = (e) => {
-  //   setCategory(e.target.value);
-  // };
+  console.log(category, status, priority);
 
-  // const handleSearch = (e) => {
-  //   setSearchText(e.target.value);
-  // };
+  if (loading) {
+    // return
+  }
 
   return (
     <main className="flex-1 w-full container mx-auto px-2.5 sm:px-0 py-12">
       <div className="flex flex-col lg:flex-row gap-12">
         <aside className="w-full lg:w-1/4 xl:w-1/5">
-          <Sidebar />
+          <Sidebar
+            category={category}
+            setCategory={setCategory}
+            status={status}
+            setStatus={setStatus}
+            priority={priority}
+            setPriority={setPriority}
+            setSearchText={setSearchText}
+          />
         </aside>
         <section className="flex-1">
           <div className="mb-8">

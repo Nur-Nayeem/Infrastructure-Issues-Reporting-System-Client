@@ -34,7 +34,7 @@ const DetailsContent = ({ issue, handleUpvote }) => {
         >
           <BiUpvote className="text-2xl" />
           <span className="text-lg font-bold text-slate-200">
-            {issue.upvotes}
+            {issue.upvoted}
           </span>
         </button>
       </div>
@@ -50,16 +50,19 @@ const DetailsContent = ({ issue, handleUpvote }) => {
 
       {/* Reported By */}
       <div className="mt-8 pt-6 border-t border-slate-800 flex items-center gap-3">
-        <img
+        {/* <img
           src={issue.user.profileImg}
           alt={issue.user.name}
           className="w-10 h-10 rounded-full bg-slate-700"
-        />
+        /> */}
+        <div className="w-10 h-10 rounded-full bg-slate-700 text-primary flex justify-center items-center text-2xl font-bold">
+          U
+        </div>
         <div>
           <p className="text-xs text-slate-500 uppercase font-semibold">
             Reported by
           </p>
-          <p className="text-slate-300 font-medium">{issue.user.name}</p>
+          <p className="text-slate-300 font-medium">{issue.reportedBy}</p>
         </div>
       </div>
     </div>

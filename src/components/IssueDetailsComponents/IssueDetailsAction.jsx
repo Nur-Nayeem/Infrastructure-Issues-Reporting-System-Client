@@ -2,14 +2,36 @@ import React from "react";
 import { BsLightningCharge } from "react-icons/bs";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import useAxios from "../../hooks/useAxios";
+import toast from "react-hot-toast";
 
 const IssueDetailsAction = ({
   issue,
   isOwner,
   isPending,
-  handleBoost,
   handleDelete,
+  refetch,
+  setRefetch,
 }) => {
+  const axiosInstance = useAxios();
+  const handleBoostIssue = () => {
+    console.log(issue);
+
+    axiosInstance
+      .patch(`/issues/${issue?._id}/boosted`)
+      .then((res) => {
+        if (res.data) {
+          console.log(res.data);
+          toast.success("Boosted");
+          setRefetch(!refetch);
+        }
+      })
+      .catch((err) => {
+        toast.error("Error", err);
+        console.log(err);
+      });
+    //
+  };
   return (
     <div className="bg-surface-dark rounded-xl border border-slate-800 p-6 shadow-lg">
       <h3 className="text-lg font-semibold text-slate-200 mb-4 font-display">
@@ -17,9 +39,9 @@ const IssueDetailsAction = ({
       </h3>
 
       <div className="space-y-3">
-        {!issue.isBoosted && (
+        {!issue.priority === "High" && (
           <button
-            onClick={handleBoost}
+            onClick={handleBoostIssue}
             className="w-full py-3 px-4 bg-linear-to-r from-accent to-orange-600 hover:from-orange-500 hover:to-orange-700 text-white font-semibold rounded-lg shadow-lg flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5"
           >
             <BsLightningCharge />
@@ -45,7 +67,7 @@ const IssueDetailsAction = ({
         )}
 
         {/* Status Display if no actions available */}
-        {!isPending && !!issue.isBoosted && (
+        {!isPending && (
           <div className="text-center py-4 text-slate-500 text-sm">
             No further actions available for this issue.
           </div>

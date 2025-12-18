@@ -10,16 +10,16 @@ const AsssignStaff = ({ issue }) => {
       </h3>
       {issue.assignedStaff ? (
         <div className="flex items-center gap-4">
-          <img
+          {/* <img
             src={issue.assignedStaff.avatar}
             alt="Staff"
             className="w-12 h-12 rounded-full border border-slate-600"
-          />
+          /> */}
+          <div className="w-12 h-12 rounded-full border border-slate-600 text-primary text-2xl justify-center items-center font-bold">
+            S
+          </div>
           <div>
-            <p className="text-slate-200 font-medium">
-              {issue.assignedStaff.name}
-            </p>
-            <p className="text-xs text-slate-500">{issue.assignedStaff.role}</p>
+            <p className="text-slate-200 font-medium">{issue.assignedStaff}</p>
           </div>
         </div>
       ) : (

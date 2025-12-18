@@ -18,7 +18,7 @@ const HeroBanner = () => {
               part of the change in your neighborhood.
             </p>
             <div className="mt-4 flex gap-4 justify-center">
-              <Link to="/issues" className="btn-primary">
+              <Link to="/all-issues" className="btn-primary">
                 View Issues
               </Link>
             </div>
