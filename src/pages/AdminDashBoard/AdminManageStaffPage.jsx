@@ -13,12 +13,13 @@ export const AdminManageStaffPage = () => {
   const [showEditModal, setShowEditModal] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(null);
   const [staff, setStaff] = useState([]);
+  const [refetch, setRefetch] = useState(false);
 
   const axiosInstance = useAxios();
 
   useEffect(() => {
     axiosInstance.get("/staff").then((res) => setStaff(res.data));
-  }, [axiosInstance]);
+  }, [axiosInstance, refetch]);
 
   const handleEditStaff = async (updatedStaff) => {
     try {
@@ -90,7 +91,13 @@ export const AdminManageStaffPage = () => {
         setShowDeleteModal={setShowDeleteModal}
       />
 
-      {showAddModal && <AddStaffModel setShowAddModal={setShowAddModal} />}
+      {showAddModal && (
+        <AddStaffModel
+          setShowAddModal={setShowAddModal}
+          setRefetch={setRefetch}
+          refetch={refetch}
+        />
+      )}
 
       {showEditModal && (
         <EditStaffModal

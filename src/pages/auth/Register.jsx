@@ -65,7 +65,7 @@ const Register = () => {
       const userDetails = {
         email,
         displayName: name,
-        role: "staff",
+        role: "citizen",
         photoURL: imageURL,
       };
 
