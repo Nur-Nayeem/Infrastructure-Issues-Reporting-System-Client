@@ -10,8 +10,7 @@ const IssueDetailsAction = ({
   isOwner,
   isPending,
   handleDelete,
-  refetch,
-  setRefetch,
+  refetchDetails,
 }) => {
   const axiosInstance = useAxios();
   const handleBoostIssue = () => {
@@ -23,12 +22,13 @@ const IssueDetailsAction = ({
         if (res.data) {
           console.log(res.data);
           toast.success("Boosted");
-          setRefetch(!refetch);
+          refetchDetails();
         }
       })
       .catch((err) => {
         toast.error("Error", err);
         console.log(err);
+        refetchDetails();
       });
     //
   };

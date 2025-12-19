@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { BsLightningCharge } from "react-icons/bs";
 import { FaChevronLeft } from "react-icons/fa";
@@ -8,30 +8,27 @@ import AsssignStaff from "../../components/IssueDetailsComponents/AsssignStaff";
 import DetailsContent from "../../components/IssueDetailsComponents/DetailsContent";
 import useUser from "../../hooks/useUser";
 import useAxios from "../../hooks/useAxios";
-
+import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 const IssueDetails = () => {
   const navigate = useNavigate();
   const { currentUser } = useUser();
   const axiosInstance = useAxios();
   const { id } = useParams();
-  const [details, setDetails] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [refetch, setRefetch] = useState(false);
 
-  useEffect(() => {
-    setLoading(true);
-    axiosInstance
-      .get(`/issues/${id}`)
-      .then((data) => {
-        console.log(data);
+  const {
+    data: issue = [],
+    isLoading,
+    refetch: refetchDetails,
+  } = useQuery({
+    queryKey: ["issues", id],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/issues/${id}`);
+      return res.data;
+    },
+  });
 
-        setDetails(data.data);
-      })
-      .catch((err) => console.log(err))
-      .finally(() => setLoading(false));
-  }, [axiosInstance, id, refetch]);
-
-  const issue = details;
+  console.log(issue?.statusTimeline);
 
   // Status Badge
   const getStatusColor = (status) => {
@@ -46,15 +43,26 @@ const IssueDetails = () => {
         return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
     }
   };
-  console.log(currentUser);
 
   const isOwner = currentUser?._id === issue.userId;
-  console.log(issue);
+
+  const isAlreadyVoted = issue?.upvotedUsers?.some(
+    (user) => user.email === currentUser?.email
+  );
 
   const isPending = issue?.status === "Pending";
 
-  const handleUpvote = () => {
-    alert("Upvoted! (API Logic here)");
+  const handleUpvote = async () => {
+    try {
+      await axiosInstance.patch(`/issues/${issue?._id}/upvote`, {
+        email: currentUser.email,
+      });
+
+      toast.success("Upvoted successfully");
+      refetchDetails();
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Already upvoted");
+    }
   };
 
   const handleDelete = () => {
@@ -64,7 +72,7 @@ const IssueDetails = () => {
     }
   };
 
-  if (loading)
+  if (isLoading)
     return (
       <div className="h-96 flex justify-center items-center">
         <h2>Loafing...</h2>
@@ -81,8 +89,8 @@ const IssueDetails = () => {
         Back to Issues
       </button>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-7 gap-8">
+        <div className="lg:col-span-4 space-y-8">
           <div className="bg-surface-dark rounded-2xl border border-slate-800 overflow-hidden shadow-xl">
             {/* Image Section */}
             <div className="relative h-64 md:h-96 w-full">
@@ -109,20 +117,23 @@ const IssueDetails = () => {
             </div>
 
             {/* content section */}
-            <DetailsContent issue={issue} handleUpvote={handleUpvote} />
+            <DetailsContent
+              issue={issue}
+              handleUpvote={handleUpvote}
+              isAlreadyVoted={isAlreadyVoted}
+            />
           </div>
         </div>
 
         {/* right Sidebar */}
-        <div className="space-y-6">
+        <div className="lg:col-span-3 space-y-6">
           {/* action card */}
           <IssueDetailsAction
             issue={issue}
             isOwner={isOwner}
             isPending={isPending}
             handleDelete={handleDelete}
-            refetch={refetch}
-            setRefetch={setRefetch}
+            refetchDetails={refetchDetails}
           />
 
           {/* assigned staff */}
@@ -133,7 +144,7 @@ const IssueDetails = () => {
             <h3 className="text-lg font-semibold text-slate-200 mb-6 font-display">
               Issue Timeline
             </h3>
-            <StyledTimeline />
+            <StyledTimeline timeline={issue.statusTimeline} />
           </div>
         </div>
       </div>

@@ -8,18 +8,13 @@ const AsssignStaff = ({ issue }) => {
         <GoPeople className="text-secondary" />
         Assigned Staff
       </h3>
-      {issue.assignedStaff ? (
+      {issue.assignedTo ? (
         <div className="flex items-center gap-4">
-          {/* <img
-            src={issue.assignedStaff.avatar}
-            alt="Staff"
-            className="w-12 h-12 rounded-full border border-slate-600"
-          /> */}
-          <div className="w-12 h-12 rounded-full border border-slate-600 text-primary text-2xl justify-center items-center font-bold">
+          <div className="w-12 h-12 rounded-full border border-slate-600 text-primary text-2xl flex justify-center items-center font-bold">
             S
           </div>
           <div>
-            <p className="text-slate-200 font-medium">{issue.assignedStaff}</p>
+            <p className="text-slate-200 font-medium">{issue.assignedTo}</p>
           </div>
         </div>
       ) : (
