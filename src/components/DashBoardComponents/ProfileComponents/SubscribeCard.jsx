@@ -1,21 +1,24 @@
 import React, { useState } from "react";
 import { FaDollarSign } from "react-icons/fa";
+import useAxios from "../../../hooks/useAxios";
+import toast from "react-hot-toast";
 
-export const SubscribeCard = ({ user, setUser }) => {
+export const SubscribeCard = ({ user, refetchUser }) => {
   const [loading, setLoading] = useState(false);
+  const axiosInstance = useAxios();
   const handleSubscribe = async () => {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    setTimeout(() => {
-      setUser((prev) => ({
-        ...prev,
-        isPremium: true,
-        subscriptionDate: new Date().toISOString(),
-        totalPayments: "৳1,000",
-      }));
+      await axiosInstance.patch(`/users/${user?._id}/subscribe`);
+
+      toast.success("Subscription activated");
+      refetchUser?.();
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to subscribe");
+    } finally {
       setLoading(false);
-      alert("Successfully subscribed to Premium!");
-    }, 1500);
+    }
   };
   return (
     <>

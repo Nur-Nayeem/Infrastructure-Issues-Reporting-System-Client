@@ -13,7 +13,9 @@ const StatsCard = ({ currentUser, user }) => {
         </div>
         <div className="flex justify-between">
           <span>Total Payments</span>
-          <span className="text-slate-100">{user.totalPayments}</span>
+          <span className="text-slate-100">
+            {user.isPremium ? "৳1000" : "৳0"}
+          </span>
         </div>
         <div className="flex justify-between">
           <span>Joined</span>
