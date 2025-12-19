@@ -13,6 +13,7 @@ import AssignTaskModal from "../../components/DashBoardComponents/modals/AssignT
 import RejectIssueModal from "../../components/DashBoardComponents/modals/RejectIssueModal";
 import AllIssuesTable from "../../components/DashBoardComponents/Tables/AllIssuesTable";
 import useAxios from "../../hooks/useAxios";
+import toast from "react-hot-toast";
 
 export const AdminAllIssuesPage = () => {
   const axiosInstance = useAxios();
@@ -23,21 +24,31 @@ export const AdminAllIssuesPage = () => {
   const [sort, setSort] = useState("newest");
   const [showAssignModal, setShowAssignModal] = useState(null);
   const [showRejectModal, setShowRejectModal] = useState(null);
+  const [selectedIssue, setSelectedIssue] = useState(null);
+  const [selectedStaff, setSelectedStaff] = useState("");
 
-  const staffList = [
-    { id: 1, name: "dfhdhjfd" },
-    { id: 2, name: "mdncjdncjds" },
-    { id: 3, name: "mdndjnjdn" },
-    { id: 4, name: "kjdscs" },
-  ];
-
-  const { data: issues = [], isLoading } = useQuery({
+  const {
+    data: issues = [],
+    isLoading,
+    refetch: refetchIssues,
+  } = useQuery({
     queryKey: ["issues"],
     queryFn: async () => {
       const res = await axiosInstance.get("/issues");
+      return res.data.result;
+    },
+  });
+
+  const { data: staffList = [], refetch: refetchStaff } = useQuery({
+    queryKey: ["staff", "active"],
+    enabled: !!selectedIssue,
+    queryFn: async () => {
+      const res = await axiosInstance.get("/staff?status=active");
       return res.data;
     },
   });
+
+  console.log(staffList);
 
   const rejectMutation = useMutation({
     mutationFn: async (issueId) => {
@@ -53,9 +64,25 @@ export const AdminAllIssuesPage = () => {
     rejectMutation.mutate(issueId);
   };
 
-  const handleAssignStaff = (issueId, staffName) => {
-    // you can connect backend later
-    console.log("Assigned:", issueId, staffName);
+  const handleAssignStaff = (issueId, staff) => {
+    console.log("Assigned:", issueId, staff);
+
+    axiosInstance
+      .patch(`/issues/${issueId}/assign-staff`, {
+        staffEmail: staff,
+      })
+      .then((res) => {
+        console.log(res);
+        toast.success("Issues Assigned to ", staff);
+        refetchIssues();
+        refetchStaff();
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Faild To Assign", err);
+        refetchIssues();
+        refetchStaff();
+      });
     setShowAssignModal(null);
   };
 
@@ -161,6 +188,7 @@ export const AdminAllIssuesPage = () => {
         getStatusIcon={getStatusIcon}
         setShowAssignModal={setShowAssignModal}
         setShowRejectModal={setShowRejectModal}
+        setSelectedIssue={setSelectedIssue}
         isLoading={isLoading}
       />
 
@@ -171,6 +199,9 @@ export const AdminAllIssuesPage = () => {
           showAssignModal={showAssignModal}
           setShowAssignModal={setShowAssignModal}
           handleAssignStaff={handleAssignStaff}
+          selectedStaff={selectedStaff}
+          setSelectedStaff={setSelectedStaff}
+          selectedIssue={selectedIssue}
         />
       )}
 

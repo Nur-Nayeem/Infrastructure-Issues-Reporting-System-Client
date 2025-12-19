@@ -9,7 +9,7 @@ import useAxios from "../../../hooks/useAxios";
 
 const defaultAvatar = "https://i.ibb.co.com/B26DPRzZ/avater.jpg";
 
-const AddStaffModel = ({ setShowAddModal }) => {
+const AddStaffModel = ({ setShowAddModal, setRefetch, refetch }) => {
   const axiosInstance = useAxios();
 
   const {
@@ -48,14 +48,14 @@ const AddStaffModel = ({ setShowAddModal }) => {
       const staffData = {
         name,
         email,
-        password, // backend will hash / create auth user
+        password,
         phone,
         photoURL: imageURL,
         role: "staff",
       };
 
       await axiosInstance.post("/create-staff", staffData);
-
+      setRefetch(!refetch);
       toast.success("Staff account created");
       setShowAddModal(false);
     } catch (err) {

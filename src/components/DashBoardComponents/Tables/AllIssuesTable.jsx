@@ -7,6 +7,7 @@ const AllIssuesTable = ({
   getStatusIcon,
   setShowAssignModal,
   setShowRejectModal,
+  setSelectedIssue,
 }) => {
   return (
     <div className="bg-surface-dark rounded-xl border border-slate-700 shadow-lg overflow-hidden">
@@ -74,9 +75,9 @@ const AllIssuesTable = ({
                   </div>
                 </td>
                 <td className="p-4">
-                  {issue.assignedStaff ? (
+                  {issue.assignedTo ? (
                     <div className="text-slate-200 font-medium">
-                      {issue.assignedStaff.name}
+                      {issue.assignedTo}
                     </div>
                   ) : (
                     <span className="text-slate-500 italic">Not assigned</span>
@@ -84,9 +85,12 @@ const AllIssuesTable = ({
                 </td>
                 <td className="p-4">
                   <div className="flex items-center gap-2">
-                    {!issue.assignedStaff && issue.status === "Pending" && (
+                    {!issue.assignedTo && issue.status === "Pending" && (
                       <button
-                        onClick={() => setShowAssignModal(issue._id)}
+                        onClick={() => {
+                          setShowAssignModal(issue._id);
+                          setSelectedIssue(issue._id);
+                        }}
                         className="px-3 py-1.5 bg-primary/20 text-primary rounded-lg hover:bg-primary/30 transition-colors text-sm flex items-center gap-2 font-medium"
                       >
                         <FaUserPlus className="w-3 h-3" />
