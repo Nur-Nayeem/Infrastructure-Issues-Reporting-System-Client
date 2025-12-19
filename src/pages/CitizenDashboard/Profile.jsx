@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaCamera,
   FaCheckCircle,
@@ -23,23 +23,40 @@ import useAuth from "../../hooks/useAuth";
 export const ProfilePage = () => {
   const [loading, setLoading] = useState(false);
   const [fileImg, setFileImg] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
 
   const { currentUser, userLoading, refetchUser } = useUser();
   const axiosInstance = useAxios();
   const { updateUserProfile } = useAuth();
 
   const [user, setUser] = useState({
-    name: currentUser?.displayName,
-    email: currentUser?.email,
-    photoURL: currentUser?.photoURL,
-    phone: currentUser?.phone || "",
-    address: currentUser?.address || "",
-    isPremium: currentUser?.isPremium || false,
-    isBlocked: currentUser?.isBlocked || false,
-    subscriptionDate: currentUser?.subscriptionDate || null,
-    totalPayments: currentUser?.totalPayments || "৳0",
+    name: "",
+    email: "",
+    photoURL: "",
+    phone: "",
+    address: "",
+    isPremium: false,
+    isBlocked: false,
+    subscriptionDate: null,
+    totalPayments: "৳0",
   });
-  const [profileImage, setProfileImage] = useState(user.photoURL);
+
+  useEffect(() => {
+    if (currentUser) {
+      setUser({
+        name: currentUser.displayName,
+        email: currentUser.email,
+        photoURL: currentUser.photoURL,
+        phone: currentUser.phone || "",
+        address: currentUser.address || "",
+        isPremium: currentUser.isPremium || false,
+        isBlocked: currentUser.isBlocked || false,
+        subscriptionDate: currentUser.subscriptionDate || null,
+        totalPayments: currentUser.totalPayments || "৳0",
+      });
+      setProfileImage(currentUser.photoURL);
+    }
+  }, [currentUser]);
 
   if (userLoading) return <p>Loading...</p>;
   if (!currentUser) return <p>No user found in DB</p>;
@@ -51,30 +68,35 @@ export const ProfilePage = () => {
     try {
       const formData = new FormData(e.target);
       const data = Object.fromEntries(formData);
-      let img;
+
+      let imgUrl = null;
+
       if (fileImg) {
-        img = await imageUpload(fileImg);
-        if (!img) {
+        imgUrl = await imageUpload(fileImg);
+        if (!imgUrl) {
           toast.error("Image upload failed. Try again.");
+          setLoading(false);
           return;
         }
       }
+
       const finalData = {
         ...data,
-        photoURL: img,
+        ...(imgUrl && { photoURL: imgUrl }),
       };
 
-      if (data.name || img) {
-        await updateUserProfile(data.name, img);
-      }
+      await updateUserProfile(
+        data.name || currentUser.displayName,
+        imgUrl || currentUser.photoURL
+      );
 
       await axiosInstance.patch(
         `/users/update/${currentUser.email}`,
         finalData
       );
+
       await refetchUser();
 
-      setUser((prev) => ({ ...prev, ...finalData }));
       toast.success("Profile updated successfully!");
     } catch (err) {
       console.error(err);
@@ -99,13 +121,11 @@ export const ProfilePage = () => {
       {user.isBlocked && <BlockedUser />}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Profile Form */}
         <div className="lg:col-span-2">
           <form
             onSubmit={handleSubmit}
             className="bg-surface-dark rounded-2xl border border-slate-800 p-8 space-y-6 shadow-lg"
           >
-            {/* Profile Image */}
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">
                 Profile Photo
@@ -135,22 +155,15 @@ export const ProfilePage = () => {
                     id="profile-upload"
                     type="file"
                     accept="image/*"
+                    disabled={user.isBlocked}
                     onChange={handleImageUpload}
                     className="hidden"
                   />
                 </div>
-                <div>
-                  <p className="text-sm text-slate-400">
-                    Click the camera icon to upload
-                  </p>
-                  <p className="text-xs text-slate-500">
-                    Recommended: 256x256 px
-                  </p>
-                </div>
               </div>
             </div>
 
-            {/* Text Fields */}
+            {/* Fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">
@@ -160,7 +173,6 @@ export const ProfilePage = () => {
                   <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input
                     name="name"
-                    placeholder="Name"
                     defaultValue={user.name}
                     className="input-box"
                   />
@@ -175,8 +187,6 @@ export const ProfilePage = () => {
                   <MdAlternateEmail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input
                     name="email"
-                    type="email"
-                    placeholder="Email"
                     disabled
                     defaultValue={user.email}
                     className="input-box"
@@ -190,10 +200,8 @@ export const ProfilePage = () => {
                 </label>
                 <div className="relative">
                   <FaPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
-
                   <input
                     name="phone"
-                    placeholder="Phone Number"
                     defaultValue={user.phone}
                     className="input-box"
                   />
@@ -208,7 +216,6 @@ export const ProfilePage = () => {
                   <FaLocationDot className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input
                     name="address"
-                    placeholder="Address"
                     defaultValue={user.address}
                     className="input-box"
                   />
@@ -226,11 +233,8 @@ export const ProfilePage = () => {
           </form>
         </div>
 
-        {/* Subscription / Stats */}
-
-        {!user.role === "admin" && (
+        {currentUser?.role === "citizen" && (
           <div className="space-y-6">
-            {/* Subscription Card */}
             <div className="bg-surface-dark rounded-2xl border border-slate-800 p-6 shadow-lg">
               <div className="flex items-center gap-4 mb-4">
                 <div
@@ -257,13 +261,12 @@ export const ProfilePage = () => {
               </div>
 
               {!user.isPremium && !user.isBlocked ? (
-                <SubscribeCard user={user} />
+                <SubscribeCard user={currentUser} refetchUser={refetchUser} />
               ) : user.isPremium ? (
-                <PremiumUserCard user={user} />
+                <PremiumUserCard user={currentUser} />
               ) : null}
             </div>
 
-            {/* Stats Card */}
             <StatsCard user={user} currentUser={currentUser} />
           </div>
         )}
