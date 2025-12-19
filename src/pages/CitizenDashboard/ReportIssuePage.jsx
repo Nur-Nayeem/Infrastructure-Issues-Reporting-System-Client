@@ -28,17 +28,20 @@ export const ReportIssuePage = () => {
       toast.error(
         "Free users can only report 3 issues. Please upgrade to premium."
       );
+      setLoadingReport(false);
       return;
     }
 
     if (!fileImg) {
       toast.error("Please select an image.");
+      setLoadingReport(false);
       return;
     }
 
     const img = await imageUpload(fileImg);
     if (!img) {
       toast.error("Image upload failed. Try again.");
+      setLoadingReport(false);
       return;
     }
 

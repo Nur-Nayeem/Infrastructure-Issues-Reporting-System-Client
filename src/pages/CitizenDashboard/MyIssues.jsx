@@ -10,41 +10,27 @@ import {
 } from "react-icons/fa";
 import { Link } from "react-router";
 import MyIssueCard from "../../components/DashBoardComponents/myIssueCard/MyIssueCard";
+import useAxios from "../../hooks/useAxios";
+import useAuth from "../../hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
 
 export const MyIssuesPage = () => {
-  const [filter, setFilter] = useState("all");
+  const [filtered, setFiltered] = useState("all");
   const [search, setSearch] = useState("");
+  const { user } = useAuth();
+  const axiosInstance = useAxios();
 
-  // Mock issues data
-  const issues = [
-    {
-      id: 1,
-      title: "Road Pothole on Main Street",
-      category: "Infrastructure",
-      status: "pending",
-      date: "2024-01-15",
-      priority: "normal",
+  const { data: issues = [], refetch } = useQuery({
+    queryKey: ["my-issues", user?.email],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/issues?email=${user?.email}`);
+      return res.data.result;
     },
-    {
-      id: 2,
-      title: "Garbage Collection Delay",
-      category: "Sanitation",
-      status: "resolved",
-      date: "2024-01-10",
-      priority: "high",
-    },
-    {
-      id: 3,
-      title: "Street Light Not Working",
-      category: "Electricity",
-      status: "in-progress",
-      date: "2024-01-12",
-      priority: "normal",
-    },
-  ];
+  });
+  console.log(issues);
 
   const filteredIssues = issues.filter((issue) => {
-    if (filter !== "all" && issue.status !== filter) return false;
+    if (filtered !== "all" && issue.status !== filtered) return false;
     if (search && !issue.title.toLowerCase().includes(search.toLowerCase()))
       return false;
     return true;
@@ -52,11 +38,11 @@ export const MyIssuesPage = () => {
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case "pending":
+      case "Pending":
         return <FaClock className="text-yellow-400" />;
-      case "in-progress":
+      case "In-Progress":
         return <FaCog className="text-blue-400" />;
-      case "resolved":
+      case "Resolved":
         return <FaCheckCircle className="text-green-400" />;
       default:
         return <FaTimesCircle className="text-red-400" />;
@@ -93,8 +79,8 @@ export const MyIssuesPage = () => {
           <div className="relative w-full md:max-w-sm mb-3 md:mb-0">
             <FaFilter className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
             <select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
+              value={filtered}
+              onChange={(e) => setFiltered(e.target.value)}
               className="input-box"
             >
               <option value="all">All Status</option>
@@ -109,11 +95,12 @@ export const MyIssuesPage = () => {
       {/* Issues List */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredIssues.length > 0 ? (
-          filteredIssues.map((issue) => (
+          filteredIssues.map((issue, index) => (
             <MyIssueCard
-              key={issue.id}
+              key={index}
               issue={issue}
               getStatusIcon={getStatusIcon}
+              refetch={refetch}
             />
           ))
         ) : (
