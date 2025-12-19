@@ -39,7 +39,7 @@ const IssueDetailsAction = ({
       </h3>
 
       <div className="space-y-3">
-        {!issue.priority === "High" && (
+        {issue.priority === "Low" && (
           <button
             onClick={handleBoostIssue}
             className="w-full py-3 px-4 bg-linear-to-r from-accent to-orange-600 hover:from-orange-500 hover:to-orange-700 text-white font-semibold rounded-lg shadow-lg flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5"

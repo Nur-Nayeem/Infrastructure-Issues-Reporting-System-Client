@@ -1,8 +1,24 @@
 import React from "react";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import { Link } from "react-router";
+import useAxios from "../../../hooks/useAxios";
+import toast from "react-hot-toast";
 
-const MyIssueCard = ({ issue, getStatusIcon }) => {
+const MyIssueCard = ({ issue, getStatusIcon, refetch }) => {
+  const axiosInstance = useAxios();
+  const handleDeleteIssue = () => {
+    axiosInstance
+      .delete(`/issues/${issue._id}`)
+      .then((res) => {
+        console.log(res);
+        toast.success("Deleted Issue");
+        refetch();
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Error To Delete");
+      });
+  };
   return (
     <div
       key={issue.id}
@@ -16,7 +32,7 @@ const MyIssueCard = ({ issue, getStatusIcon }) => {
               className={`
                     px-2 py-1 rounded text-xs font-medium
                     ${
-                      issue.priority === "high"
+                      issue.priority === "High"
                         ? "bg-red-500/20 text-red-300"
                         : "bg-slate-700 text-slate-300"
                     }
@@ -33,16 +49,19 @@ const MyIssueCard = ({ issue, getStatusIcon }) => {
         </div>
 
         <div className="flex gap-2">
-          {issue.status === "pending" && (
+          {issue.status === "Pending" && (
             <button className="p-2 bg-accent/20 text-accent rounded-lg hover:bg-accent/30">
               <FaEdit />
             </button>
           )}
-          <button className="p-2 bg-primary/20 text-primary rounded-lg hover:bg-primary/30">
+          <button
+            onClick={handleDeleteIssue}
+            className="p-2 bg-primary/20 text-primary rounded-lg hover:bg-primary/30"
+          >
             <FaTrash />
           </button>
           <Link
-            to={`/all-issues/${issue.id}`}
+            to={`/all-issues/${issue._id}`}
             className="p-2 bg-slate-700 text-slate-300 rounded-lg hover:bg-slate-600"
           >
             <FaEye />
