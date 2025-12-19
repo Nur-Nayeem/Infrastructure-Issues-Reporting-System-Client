@@ -1,62 +1,68 @@
 import React from "react";
-import {
-  FaClipboardList,
-  FaCheckCircle,
-  FaChartBar,
-  FaTasks,
-} from "react-icons/fa";
+import { FaClipboardList, FaCheckCircle, FaTasks } from "react-icons/fa";
 import { Link } from "react-router";
 import { StatCard } from "../../components/DashBoardComponents/StatCard/StatCard";
 import { MdOutlineToday } from "react-icons/md";
 import IssuesStatisticsChart from "../../components/DashBoardComponents/Charts/IssuesStatisticsChart";
 import TaskCard from "../../components/cards/TaskCard";
+import useAuth from "../../hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
+import useAxios from "../../hooks/useAxios";
 
 export const StaffDashboardPage = () => {
-  // Mock staff stats
+  const { user } = useAuth();
+  const axiosInstance = useAxios();
+
+  const { data: issues = [] } = useQuery({
+    queryKey: ["issues", user?.email],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/issues?assignedto=${user?.email}`);
+      return res.data.result;
+    },
+  });
+
+  //resolved tasks:
+
+  const resolvedTask = issues.filter((issue) => {
+    if (issue.status === "Resolved") return true;
+    return false;
+  });
+
+  // today
+  const today = new Date().toISOString().split("T")[0];
+
+  // Filter today's tasks
+  const todaysTasks = issues.filter((issue) => {
+    if (!issue.assignedAt) return false;
+
+    const assignedDate = new Date(issue.assignedAt).toISOString().split("T")[0];
+
+    return assignedDate === today;
+  });
+
   const stats = [
     {
       title: "Assigned Issues",
-      value: "8",
+      value: issues.length,
       icon: <FaClipboardList />,
       color: "bg-blue-500/20 text-blue-400",
     },
     {
       title: "Total Resolved",
-      value: "24",
+      value: resolvedTask.length,
       icon: <FaCheckCircle />,
       color: "bg-green-500/20 text-green-400",
     },
     {
-      title: "Today’s Task",
-      value: "2",
+      title: "Today's Task",
+      value: todaysTasks.length,
       icon: <MdOutlineToday />,
       color: "bg-amber-500/20 text-amber-400",
     },
   ];
 
-  const todaysTasks = [
-    {
-      id: 1,
-      title: "Inspect Main Street pothole",
-      assignedAt: "10:00 AM",
-      priority: "high",
-    },
-    {
-      id: 2,
-      title: "Review garbage collection route",
-      assignedAt: "2:00 PM",
-      priority: "normal",
-    },
-    {
-      id: 3,
-      title: "Update progress on street lights",
-      assignedAt: "4:00 PM",
-      priority: "normal",
-    },
-  ];
-
   return (
-    <div>
+    <div className="max-w-7xl mx-auto p-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-slate-100">Staff Dashboard</h1>
         <div className="text-sm text-slate-400">
@@ -88,9 +94,12 @@ export const StaffDashboardPage = () => {
               <TaskCard key={index} task={task} />
             ))}
           </div>
-          <button className="w-full mt-4 py-2 border border-slate-700 rounded-lg hover:border-slate-600 transition-colors">
+          <Link
+            to={"/dashboard/staff/assigned-issues"}
+            className="w-full flex items-center justify-center mt-4 py-2 border border-slate-700 rounded-lg hover:border-slate-600 transition-colors"
+          >
             View All Tasks
-          </button>
+          </Link>
         </div>
       </div>
     </div>
