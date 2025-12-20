@@ -102,11 +102,11 @@ export const AdminAllIssuesPage = () => {
     }
 
     if (sort === "newest") {
-      data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     }
 
     if (sort === "oldest") {
-      data.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+      data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
     }
 
     return data;

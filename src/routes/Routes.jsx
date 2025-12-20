@@ -19,6 +19,8 @@ import AdminPaymentsPage from "../pages/AdminDashBoard/AdminPaymentsPage";
 import { StaffAssignedIssuesPage } from "../pages/StaffDashBoard/StaffAssignedIssuesPage";
 import PaymentSuccess from "../pages/Payments/PaymentSuccess";
 import PayemntCancel from "../pages/Payments/PayemntCancel";
+import SubcriptionSuccess from "../pages/Payments/SubcriptionSuccess";
+import SubcriptionCancel from "../pages/Payments/SubcriptionCancel";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +46,14 @@ const router = createBrowserRouter([
       {
         path: "payment-cancel",
         element: <PayemntCancel />,
+      },
+      {
+        path: "subscription-success",
+        element: <SubcriptionSuccess />,
+      },
+      {
+        path: "subscription-cancel",
+        element: <SubcriptionCancel />,
       },
     ],
   },

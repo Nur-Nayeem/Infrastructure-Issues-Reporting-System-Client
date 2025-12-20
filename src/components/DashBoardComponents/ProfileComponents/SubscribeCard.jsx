@@ -3,23 +3,27 @@ import { FaDollarSign } from "react-icons/fa";
 import useAxios from "../../../hooks/useAxios";
 import toast from "react-hot-toast";
 
-export const SubscribeCard = ({ user, refetchUser }) => {
+export const SubscribeCard = ({ user }) => {
   const [loading, setLoading] = useState(false);
   const axiosInstance = useAxios();
   const handleSubscribe = async () => {
     try {
       setLoading(true);
 
-      await axiosInstance.patch(`/users/${user?._id}/subscribe`);
+      const res = await axiosInstance.post("/subscriptions/checkout", {
+        userId: user._id,
+      });
 
-      toast.success("Subscription activated");
-      refetchUser?.();
+      if (res.data?.url) {
+        window.location.href = res.data.url;
+      }
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to subscribe");
+      toast.error("Failed to start payment", err);
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <>
       <div className="mb-4 p-4 bg-background-dark/50 rounded-xl text-center">
