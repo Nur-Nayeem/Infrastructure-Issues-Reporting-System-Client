@@ -12,18 +12,13 @@ import { FaChartLine } from "react-icons/fa";
 
 const IssuesStatisticsChart = () => {
   const data = [
-    { month: "Jan", assigned: 40, resolved: 30 },
-    { month: "Feb", assigned: 45, resolved: 35 },
-    { month: "Mar", assigned: 50, resolved: 42 },
-    { month: "Apr", assigned: 48, resolved: 40 },
-    { month: "May", assigned: 55, resolved: 50 },
-    { month: "Jun", assigned: 60, resolved: 54 },
-    { month: "Jul", assigned: 65, resolved: 58 },
-    { month: "Aug", assigned: 62, resolved: 56 },
-    { month: "Sep", assigned: 70, resolved: 65 },
-    { month: "Oct", assigned: 75, resolved: 68 },
-    { month: "Nov", assigned: 72, resolved: 66 },
-    { month: "Dec", assigned: 80, resolved: 74 },
+    { month: "Sat", assigned: 40, resolved: 30 },
+    { month: "Sun", assigned: 45, resolved: 35 },
+    { month: "Mon", assigned: 50, resolved: 42 },
+    { month: "Tue", assigned: 48, resolved: 40 },
+    { month: "Wed", assigned: 55, resolved: 50 },
+    { month: "Thu", assigned: 60, resolved: 54 },
+    { month: "Fri", assigned: 65, resolved: 58 },
   ];
 
   return (

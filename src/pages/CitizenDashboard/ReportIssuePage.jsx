@@ -7,6 +7,8 @@ import toast from "react-hot-toast";
 import { imageUpload } from "../../lib";
 import useUser from "../../hooks/useUser";
 import useAxios from "../../hooks/useAxios";
+import { MdDescription, MdTitle } from "react-icons/md";
+import { BiCategory } from "react-icons/bi";
 
 export const ReportIssuePage = () => {
   const navigate = useNavigate();
@@ -110,25 +112,31 @@ export const ReportIssuePage = () => {
               <label className="text-sm text-slate-300 mb-1 block">
                 Issue Title *
               </label>
-              <input
-                name="title"
-                required
-                className="input-box"
-                placeholder="Title of the Issue"
-              />
+              <div className="relative">
+                <MdTitle className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                <input
+                  name="title"
+                  required
+                  className="input-box"
+                  placeholder="Title of the Issue"
+                />
+              </div>
             </div>
 
             <div>
               <label className="text-sm text-slate-300 mb-1 block">
                 Description *
               </label>
-              <textarea
-                name="description"
-                rows={4}
-                required
-                className="input-box"
-                placeholder="Describe the issue in detail..."
-              ></textarea>
+              <div className="relative">
+                <MdDescription className="absolute left-4 top-[18px] text-slate-500" />
+                <textarea
+                  name="description"
+                  rows={4}
+                  required
+                  className="input-box"
+                  placeholder="Describe the issue in detail..."
+                ></textarea>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -136,13 +144,16 @@ export const ReportIssuePage = () => {
                 <label className="text-sm text-slate-300 mb-1 block">
                   Category *
                 </label>
-                <select name="category" required className="input-box">
-                  <option value="">Select Category</option>
-                  <option value="infrastructure">Infrastructure</option>
-                  <option value="sanitation">Sanitation</option>
-                  <option value="electricity">Electricity</option>
-                  <option value="water">Water Supply</option>
-                </select>
+                <div className="relative">
+                  <BiCategory className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <select name="category" required className="input-box">
+                    <option value="">Select Category</option>
+                    <option value="infrastructure">Infrastructure</option>
+                    <option value="sanitation">Sanitation</option>
+                    <option value="electricity">Electricity</option>
+                    <option value="water">Water Supply</option>
+                  </select>
+                </div>
               </div>
 
               <div>
@@ -151,7 +162,12 @@ export const ReportIssuePage = () => {
                 </label>
                 <div className="relative">
                   <FaMapMarkerAlt className="absolute left-3 top-3.5 text-slate-500" />
-                  <input name="location" required className="input-box" />
+                  <input
+                    name="location"
+                    placeholder="Location"
+                    required
+                    className="input-box"
+                  />
                 </div>
               </div>
             </div>
