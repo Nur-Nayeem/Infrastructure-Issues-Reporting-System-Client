@@ -2,36 +2,8 @@ import React from "react";
 import { BsLightningCharge } from "react-icons/bs";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import useAxios from "../../hooks/useAxios";
-import toast from "react-hot-toast";
-
-const IssueDetailsAction = ({
-  issue,
-  isOwner,
-  isPending,
-  handleDelete,
-  refetchDetails,
-}) => {
-  const axiosInstance = useAxios();
-  const handleBoostIssue = () => {
-    console.log(issue);
-
-    axiosInstance
-      .patch(`/issues/${issue?._id}/boosted`)
-      .then((res) => {
-        if (res.data) {
-          console.log(res.data);
-          toast.success("Boosted");
-          refetchDetails();
-        }
-      })
-      .catch((err) => {
-        toast.error("Error", err);
-        console.log(err);
-        refetchDetails();
-      });
-    //
-  };
+import { handleBoostIssue } from "../../lib";
+const IssueDetailsAction = ({ issue, isOwner, isPending, handleDelete }) => {
   return (
     <div className="bg-surface-dark rounded-xl border border-slate-800 p-6 shadow-lg">
       <h3 className="text-lg font-semibold text-slate-200 mb-4 font-display">
@@ -39,7 +11,7 @@ const IssueDetailsAction = ({
       </h3>
 
       <div className="space-y-3">
-        {issue.priority === "Low" && (
+        {issue.priority === "Low" && issue.status !== "Resolved" && (
           <button
             onClick={handleBoostIssue}
             className="w-full py-3 px-4 bg-linear-to-r from-accent to-orange-600 hover:from-orange-500 hover:to-orange-700 text-white font-semibold rounded-lg shadow-lg flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5"

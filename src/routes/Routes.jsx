@@ -17,6 +17,8 @@ import { AdminManageUsersPage } from "../pages/AdminDashBoard/AdminManageUsersPa
 import { AdminManageStaffPage } from "../pages/AdminDashBoard/AdminManageStaffPage";
 import AdminPaymentsPage from "../pages/AdminDashBoard/AdminPaymentsPage";
 import { StaffAssignedIssuesPage } from "../pages/StaffDashBoard/StaffAssignedIssuesPage";
+import PaymentSuccess from "../pages/Payments/PaymentSuccess";
+import PayemntCancel from "../pages/Payments/PayemntCancel";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +36,14 @@ const router = createBrowserRouter([
       {
         path: "all-issues/:id",
         element: <IssueDetails />,
+      },
+      {
+        path: "payment-success",
+        element: <PaymentSuccess />,
+      },
+      {
+        path: "payment-cancel",
+        element: <PayemntCancel />,
       },
     ],
   },

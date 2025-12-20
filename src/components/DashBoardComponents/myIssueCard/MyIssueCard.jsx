@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
+import { FaEdit, FaEye, FaRocket, FaTrash } from "react-icons/fa";
 import { Link } from "react-router";
 import useAxios from "../../../hooks/useAxios";
 import toast from "react-hot-toast";
 import EditIssueModal from "../modals/EditIssueModal";
+import useUser from "../../../hooks/useUser";
+import { handleBoostIssue } from "../../../lib";
 
 const MyIssueCard = ({ issue, getStatusIcon, refetch }) => {
   const axiosInstance = useAxios();
+  const { currentUser } = useUser();
   const [editIssuesModal, setEditIssuesModal] = useState(false);
 
   const handleDeleteIssue = () => {
@@ -34,7 +37,11 @@ const MyIssueCard = ({ issue, getStatusIcon, refetch }) => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-2">
-              {getStatusIcon(issue.status)}
+              <div className="flex items-center gap-2">
+                {getStatusIcon(issue.status)}
+                <span>{issue.status}</span>
+              </div>
+
               <span
                 className={`
                       px-2 py-1 rounded text-xs font-medium
@@ -56,6 +63,23 @@ const MyIssueCard = ({ issue, getStatusIcon, refetch }) => {
           </div>
 
           <div className="flex gap-2">
+            {issue.priority === "Low" && (
+              <button
+                onClick={() => handleBoostIssue(issue._id, currentUser)}
+                className="p-2 bg-yellow-500/20 text-yellow-500 rounded-lg hover:bg-yellow-500/30 cursor-pointer"
+                title="Boost Issue"
+              >
+                <FaRocket />
+              </button>
+            )}
+
+            <Link
+              to={`/all-issues/${issue._id}`}
+              className="p-2 bg-slate-700 text-slate-300 rounded-lg hover:bg-slate-600 cursor-pointer"
+              title="View Details"
+            >
+              <FaEye />
+            </Link>
             {/* Only show Edit button if status is Pending */}
             {issue.status === "Pending" && (
               <button
@@ -74,14 +98,6 @@ const MyIssueCard = ({ issue, getStatusIcon, refetch }) => {
             >
               <FaTrash />
             </button>
-
-            <Link
-              to={`/all-issues/${issue._id}`}
-              className="p-2 bg-slate-700 text-slate-300 rounded-lg hover:bg-slate-600 cursor-pointer"
-              title="View Details"
-            >
-              <FaEye />
-            </Link>
           </div>
         </div>
       </div>
