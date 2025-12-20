@@ -9,30 +9,57 @@ import {
 } from "react-icons/fa";
 import { Link } from "react-router";
 import { StatCard } from "../../components/DashBoardComponents/StatCard/StatCard";
+import useAuth from "../../hooks/useAuth";
+import useAxios from "../../hooks/useAxios";
+import { useQuery } from "@tanstack/react-query";
 
 export const DashboardPage = () => {
+  const { user } = useAuth();
+  const axiosInstance = useAxios();
+
+  const { data: issues = [] } = useQuery({
+    queryKey: ["issues", user?.email],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/issues?reportedby=${user?.email}`);
+      return res.data.result;
+    },
+  });
+
+  const resolvedTask = issues.filter((issue) => {
+    if (issue.status === "Resolved") return true;
+    return false;
+  });
+  const pendingTask = issues.filter((issue) => {
+    if (issue.status === "Pending") return true;
+    return false;
+  });
+  const inProgressTask = issues.filter((issue) => {
+    if (issue.status === "In-Progress") return true;
+    return false;
+  });
+
   const stats = [
     {
       title: "Total Issues",
-      value: "12",
+      value: issues?.length,
       icon: <FaClipboardList />,
       color: "bg-blue-500/20 text-blue-400",
     },
     {
       title: "Pending",
-      value: "3",
+      value: pendingTask.length,
       icon: <FaClock />,
       color: "bg-yellow-500/20 text-yellow-400",
     },
     {
       title: "In Progress",
-      value: "2",
+      value: inProgressTask.length,
       icon: <FaCog />,
       color: "bg-orange-500/20 text-orange-400",
     },
     {
       title: "Resolved",
-      value: "7",
+      value: resolvedTask.length,
       icon: <FaCheckCircle />,
       color: "bg-green-500/20 text-green-400",
     },

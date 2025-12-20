@@ -14,31 +14,77 @@ import IssuesOverviewChart from "../../components/DashBoardComponents/Charts/Iss
 import LatestUSerCArd from "../../components/cards/LatestUSerCArd";
 import PayementCard from "../../components/cards/PayementCard";
 import LatestIssueCard from "../../components/cards/LatestIssueCard";
+import useAxios from "../../hooks/useAxios";
+import { useQuery } from "@tanstack/react-query";
 
 export const AdminDashboardPage = () => {
+  const axiosInstance = useAxios();
+
+  const { data: issues = [] } = useQuery({
+    queryKey: ["issues"],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/issues`);
+      return res.data.result;
+    },
+  });
+  const { data: users = [] } = useQuery({
+    queryKey: ["users", "active", "citizen"],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/users?status=active&role=citizen`);
+      return res.data;
+    },
+  });
+  const { data: staff = [] } = useQuery({
+    queryKey: ["users", "active", "staff"],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/users?status=active&role=staff`);
+      return res.data;
+    },
+  });
+
+  const latestIssues = [...issues]
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 3);
+
+  const latestUsers = [...users]
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 3);
+
+  const resolvedTask = issues.filter((issue) => {
+    if (issue.status === "Resolved") return true;
+    return false;
+  });
+  const pendingTask = issues.filter((issue) => {
+    if (issue.status === "Pending") return true;
+    return false;
+  });
+  const RejectedTask = issues.filter((issue) => {
+    if (issue.status === "Rejected") return true;
+    return false;
+  });
   // Stats data
   const stats = [
     {
       title: "Total Issues",
-      value: "1,247",
+      value: issues?.length,
       icon: <FaClipboardList />,
       color: "bg-blue-500/20 text-blue-400",
     },
     {
       title: "Resolved",
-      value: "892",
+      value: resolvedTask.length,
       icon: <FaCheckCircle />,
       color: "bg-green-500/20 text-green-400",
     },
     {
       title: "Pending",
-      value: "187",
+      value: pendingTask.length,
       icon: <FaClock />,
       color: "bg-yellow-500/20 text-yellow-400",
     },
     {
       title: "Rejected",
-      value: "45",
+      value: RejectedTask.length,
       icon: <FaTimesCircle />,
       color: "bg-red-500/20 text-red-400",
     },
@@ -50,34 +96,15 @@ export const AdminDashboardPage = () => {
     },
     {
       title: "Active Users",
-      value: "1,234",
+      value: users?.length,
       icon: <FaUsers />,
       color: "bg-indigo-500/20 text-indigo-400",
     },
-  ];
-
-  // Latest issues
-  const latestIssues = [
     {
-      id: 1,
-      title: "Major Road Damage",
-      user: "John Doe",
-      status: "pending",
-      priority: "high",
-    },
-    {
-      id: 2,
-      title: "Water Supply Issue",
-      user: "Sarah Smith",
-      status: "in-progress",
-      priority: "normal",
-    },
-    {
-      id: 3,
-      title: "Garbage Collection",
-      user: "Mike Johnson",
-      status: "pending",
-      priority: "high",
+      title: "Active Staff",
+      value: staff?.length,
+      icon: <FaUsers />,
+      color: "bg-indigo-500/20 text-indigo-400",
     },
   ];
 
@@ -103,28 +130,6 @@ export const AdminDashboardPage = () => {
       type: "Premium Subscription",
       amount: "৳1000",
       status: "pending",
-    },
-  ];
-
-  // Latest users
-  const latestUsers = [
-    {
-      id: 1,
-      name: "Alex Chen",
-      email: "alex@example.com",
-      isPremium: true,
-    },
-    {
-      id: 2,
-      name: "Maria Garcia",
-      email: "maria@example.com",
-      isPremium: false,
-    },
-    {
-      id: 3,
-      name: "James Wilson",
-      email: "james@example.com",
-      isPremium: true,
     },
   ];
 
