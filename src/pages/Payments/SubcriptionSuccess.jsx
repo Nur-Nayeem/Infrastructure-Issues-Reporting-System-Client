@@ -1,24 +1,20 @@
-import React, { useEffect } from "react";
-import useAxios from "../../hooks/useAxios";
+import { useEffect } from "react";
 import { useSearchParams } from "react-router";
-import toast from "react-hot-toast";
+import useAxios from "../../hooks/useAxios";
 
-const SubcriptionSuccess = () => {
+const SubscriptionSuccess = () => {
   const [params] = useSearchParams();
-  const userId = params.get("userId");
+  const sessionId = params.get("session_id");
   const axiosInstance = useAxios();
+
   useEffect(() => {
-    axiosInstance
-      .patch(`/users/${userId}/subscribe`)
-      .then(() => {
-        toast.success("Subscribe Succes");
-      })
-      .catch((err) => {
-        toast.error("Errpr", err);
-      });
-  }, [userId, axiosInstance]);
+    if (sessionId) {
+      axiosInstance.post("/payments/confirm", { sessionId });
+    }
+  }, [sessionId, axiosInstance]);
+
   return (
-    <div className="text-center mt-20">
+    <div className="text-center my-20">
       <h1 className="text-2xl font-bold text-green-400">
         Subscription Activated!
       </h1>
@@ -27,4 +23,4 @@ const SubcriptionSuccess = () => {
   );
 };
 
-export default SubcriptionSuccess;
+export default SubscriptionSuccess;
