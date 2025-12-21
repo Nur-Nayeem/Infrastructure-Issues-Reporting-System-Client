@@ -21,6 +21,9 @@ import PaymentSuccess from "../pages/Payments/PaymentSuccess";
 import PayemntCancel from "../pages/Payments/PayemntCancel";
 import SubcriptionSuccess from "../pages/Payments/SubcriptionSuccess";
 import SubcriptionCancel from "../pages/Payments/SubcriptionCancel";
+import AdminRoute from "./AdminRoute/AdminRoute";
+import StaffRoute from "./StaffRoute/StaffRoute";
+import NotFound from "../components/Shared/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -97,33 +100,65 @@ const router = createBrowserRouter([
       },
       {
         path: "staff/assigned-issues",
-        Component: StaffAssignedIssuesPage,
+        element: (
+          <StaffRoute>
+            <StaffAssignedIssuesPage />
+          </StaffRoute>
+        ),
       },
       {
         path: "staff/profile",
-        Component: ProfilePage,
+        element: (
+          <StaffRoute>
+            <ProfilePage />
+          </StaffRoute>
+        ),
       },
       {
         path: "admin/issues",
-        Component: AdminAllIssuesPage,
+        element: (
+          <AdminRoute>
+            <AdminAllIssuesPage />
+          </AdminRoute>
+        ),
       },
       {
         path: "admin/manage-users",
-        Component: AdminManageUsersPage,
+        element: (
+          <AdminRoute>
+            <AdminManageUsersPage />
+          </AdminRoute>
+        ),
       },
       {
         path: "admin/manage-staff",
-        Component: AdminManageStaffPage,
+        element: (
+          <AdminRoute>
+            <AdminManageStaffPage />
+          </AdminRoute>
+        ),
       },
       {
         path: "admin/payments",
-        Component: AdminPaymentsPage,
+        element: (
+          <AdminRoute>
+            <AdminPaymentsPage />
+          </AdminRoute>
+        ),
       },
       {
         path: "admin/profile",
-        Component: ProfilePage,
+        element: (
+          <AdminRoute>
+            <ProfilePage />
+          </AdminRoute>
+        ),
       },
     ],
+  },
+  {
+    path: "*",
+    Component: NotFound,
   },
 ]);
 
