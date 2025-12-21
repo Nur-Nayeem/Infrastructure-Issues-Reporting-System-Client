@@ -42,6 +42,14 @@ export const AdminDashboardPage = () => {
     },
   });
 
+  const { data: payments = [] } = useQuery({
+    queryKey: ["payments"],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/payments`);
+      return res.data;
+    },
+  });
+
   const latestIssues = [...issues]
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 3);
@@ -108,31 +116,6 @@ export const AdminDashboardPage = () => {
     },
   ];
 
-  // Latest payments
-  const latestPayments = [
-    {
-      id: 1,
-      user: "Robert Brown",
-      type: "Premium Subscription",
-      amount: "৳1000",
-      status: "completed",
-    },
-    {
-      id: 2,
-      user: "Lisa Taylor",
-      type: "Issue Boost",
-      amount: "৳100",
-      status: "completed",
-    },
-    {
-      id: 3,
-      user: "David Miller",
-      type: "Premium Subscription",
-      amount: "৳1000",
-      status: "pending",
-    },
-  ];
-
   return (
     <div>
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
@@ -167,7 +150,7 @@ export const AdminDashboardPage = () => {
           <div className="p-4 border-b border-slate-800 flex items-center justify-between">
             <h3 className="font-semibold text-slate-100">Latest Issues</h3>
             <Link
-              to="/admin/issues"
+              to="/dashboard/admin/issues"
               className="text-primary text-sm hover:underline"
             >
               View all
@@ -185,14 +168,14 @@ export const AdminDashboardPage = () => {
           <div className="p-4 border-b border-slate-800 flex justify-between">
             <h3 className="font-semibold text-slate-100">Latest Payments</h3>
             <Link
-              to="/admin/payments"
+              to="/dashboard/admin/payments"
               className="text-primary text-sm hover:underline"
             >
               View all
             </Link>
           </div>
           <div className="divide-y divide-slate-800/50">
-            {latestPayments.map((payment, index) => (
+            {payments.map((payment, index) => (
               <PayementCard index={index} payment={payment} />
             ))}
           </div>
@@ -203,7 +186,7 @@ export const AdminDashboardPage = () => {
           <div className="p-4 border-b border-slate-800 flex items-center justify-between">
             <h3 className="font-semibold text-slate-100">Latest Users</h3>
             <Link
-              to="/admin/users"
+              to="/dashboard/admin/manage-users"
               className="text-primary text-sm hover:underline"
             >
               View all

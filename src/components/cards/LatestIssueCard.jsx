@@ -23,18 +23,16 @@ const LatestIssueCard = ({ issue }) => {
       <div className="flex items-center justify-between">
         <span
           className={`px-2 py-1 rounded text-xs ${
-            issue.status === "pending"
+            issue.status === "Pending"
               ? "bg-yellow-500/20 text-yellow-300"
-              : issue.status === "in-progress"
+              : issue.status === "In-Progress"
                 ? "bg-blue-500/20 text-blue-300"
                 : "bg-green-500/20 text-green-300"
           }`}
         >
           {issue.status}
         </span>
-        <button className="text-sm text-primary hover:underline">
-          Assign Staff
-        </button>
+        <span className="text-sm">{issue.createdAt.split("T")[0]}</span>
       </div>
     </div>
   );
