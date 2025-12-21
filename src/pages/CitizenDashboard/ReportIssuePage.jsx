@@ -6,20 +6,22 @@ import ImageComponent from "../../components/DashBoardComponents/ReportIssues/Im
 import toast from "react-hot-toast";
 import { imageUpload } from "../../lib";
 import useUser from "../../hooks/useUser";
-import useAxios from "../../hooks/useAxios";
 import { MdDescription, MdTitle } from "react-icons/md";
 import { BiCategory } from "react-icons/bi";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import LoadingSpinner from "../../components/Shared/Loader";
 
 export const ReportIssuePage = () => {
   const navigate = useNavigate();
-  const axiosInstance = useAxios();
+  // const axiosInstance = useAxios();
+  const axiosSecureInstance = useAxiosSecure();
   const [image, setImage] = useState(null);
   const [fileImg, setFileImg] = useState(null);
   const [loadingReport, setLoadingReport] = useState(false);
 
   const { currentUser, userLoading, refetchUser } = useUser();
 
-  if (userLoading) return <p>Loading...</p>;
+  if (userLoading) return <LoadingSpinner />;
   if (!currentUser) return <p>No user found in DB</p>;
 
   const handleSubmit = async (e) => {
@@ -59,7 +61,7 @@ export const ReportIssuePage = () => {
     console.log(IssueData);
 
     try {
-      const res = await axiosInstance.post("/issues", IssueData);
+      const res = await axiosSecureInstance.post("/issues", IssueData);
       if (res.data) {
         toast.success("Issue reported successfully");
 

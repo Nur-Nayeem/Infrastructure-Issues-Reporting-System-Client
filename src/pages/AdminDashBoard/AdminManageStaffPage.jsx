@@ -4,8 +4,8 @@ import DeleteStaffModal from "../../components/DashBoardComponents/modals/Delete
 import EditStaffModal from "../../components/DashBoardComponents/modals/EditStaffModal";
 import StaffTable from "../../components/DashBoardComponents/Tables/StaffTable";
 import AddStaffModel from "../../components/DashBoardComponents/modals/AddStaffModel";
-import useAxios from "../../hooks/useAxios";
 import toast from "react-hot-toast";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 export const AdminManageStaffPage = () => {
   const [search, setSearch] = useState("");
@@ -14,18 +14,17 @@ export const AdminManageStaffPage = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(null);
   const [staff, setStaff] = useState([]);
   const [refetch, setRefetch] = useState(false);
-
-  const axiosInstance = useAxios();
+  const axiosSecureInstance = useAxiosSecure();
 
   useEffect(() => {
-    axiosInstance.get("/staff").then((res) => setStaff(res.data));
-  }, [axiosInstance, refetch]);
+    axiosSecureInstance.get("/staff").then((res) => setStaff(res.data));
+  }, [axiosSecureInstance, refetch]);
 
   const handleEditStaff = async (updatedStaff) => {
     try {
       const { email, ...updateData } = updatedStaff;
 
-      await axiosInstance.patch(`/staff/${email}`, updateData);
+      await axiosSecureInstance.patch(`/staff/${email}`, updateData);
 
       setStaff((prev) =>
         prev.map((item) =>
@@ -42,7 +41,7 @@ export const AdminManageStaffPage = () => {
 
   const handleDeleteStaff = async (email) => {
     try {
-      await axiosInstance.delete(`/staff/${email}`);
+      await axiosSecureInstance.delete(`/staff/${email}`);
       setStaff((prev) => prev.filter((item) => item.email !== email));
       toast.success("Staff deleted");
       setShowDeleteModal(null);

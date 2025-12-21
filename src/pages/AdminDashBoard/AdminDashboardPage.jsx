@@ -14,30 +14,34 @@ import IssuesOverviewChart from "../../components/DashBoardComponents/Charts/Iss
 import LatestUSerCArd from "../../components/cards/LatestUSerCArd";
 import PayementCard from "../../components/cards/PayementCard";
 import LatestIssueCard from "../../components/cards/LatestIssueCard";
-import useAxios from "../../hooks/useAxios";
 import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 export const AdminDashboardPage = () => {
-  const axiosInstance = useAxios();
+  const axiosSecureInstance = useAxiosSecure();
 
   const { data: issues = [] } = useQuery({
     queryKey: ["issues"],
     queryFn: async () => {
-      const res = await axiosInstance.get(`/issues`);
+      const res = await axiosSecureInstance.get(`/issues`);
       return res.data.result;
     },
   });
   const { data: users = [] } = useQuery({
     queryKey: ["users", "active", "citizen"],
     queryFn: async () => {
-      const res = await axiosInstance.get(`/users?status=active&role=citizen`);
+      const res = await axiosSecureInstance.get(
+        `/users?status=active&role=citizen`
+      );
       return res.data;
     },
   });
   const { data: staff = [] } = useQuery({
     queryKey: ["users", "active", "staff"],
     queryFn: async () => {
-      const res = await axiosInstance.get(`/users?status=active&role=staff`);
+      const res = await axiosSecureInstance.get(
+        `/users?status=active&role=staff`
+      );
       return res.data;
     },
   });
@@ -45,7 +49,7 @@ export const AdminDashboardPage = () => {
   const { data: payments = [] } = useQuery({
     queryKey: ["payments"],
     queryFn: async () => {
-      const res = await axiosInstance.get(`/payments`);
+      const res = await axiosSecureInstance.get(`/payments`);
       return res.data;
     },
   });
@@ -70,6 +74,12 @@ export const AdminDashboardPage = () => {
     if (issue.status === "Rejected") return true;
     return false;
   });
+
+  const totalReceivedPayments = payments.reduce(
+    (sum, payment) => sum + Number(payment.amount || 0),
+    0
+  );
+
   // Stats data
   const stats = [
     {
@@ -98,7 +108,7 @@ export const AdminDashboardPage = () => {
     },
     {
       title: "Total payment received",
-      value: "৳45,800",
+      value: totalReceivedPayments,
       icon: <FaDollarSign />,
       color: "bg-purple-500/20 text-purple-400",
     },
@@ -137,10 +147,10 @@ export const AdminDashboardPage = () => {
       {/* charts and overview */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 my-8">
         {/* issuse */}
-        <IssuesOverviewChart />
+        <IssuesOverviewChart issues={issues} />
 
         {/* payments  */}
-        <ReceivedPaymentsChart />
+        <ReceivedPaymentsChart payments={payments} />
       </div>
 
       {/* lest data table */}
@@ -176,7 +186,7 @@ export const AdminDashboardPage = () => {
           </div>
           <div className="divide-y divide-slate-800/50">
             {payments.map((payment, index) => (
-              <PayementCard index={index} payment={payment} />
+              <PayementCard key={index} payment={payment} />
             ))}
           </div>
         </div>

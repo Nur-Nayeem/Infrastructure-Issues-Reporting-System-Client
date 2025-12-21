@@ -45,11 +45,11 @@ const Sidebar = ({
           >
             //TODO:category list must be change
             <option value={"All Categories"}>All Categories</option>
-            <option value={"Pothole"}>Infrastructure</option>
-            <option value={"Streetlight"}>Road</option>
-            <option value={"Vandalism"}>sanitation</option>
-            <option value={"Maintenance"}>Electricity</option>
-            <option value={"Water Leak"}>Water Supply</option>
+            <option value={"Infrastructure"}>Infrastructure</option>
+            <option value={"Road"}>Road</option>
+            <option value={"sanitation"}>sanitation</option>
+            <option value={"Electricity"}>Electricity</option>
+            <option value={"Water Supply"}>Water Supply</option>
           </select>
         </div>
         <div className="flex flex-col gap-4">

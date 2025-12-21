@@ -78,7 +78,7 @@ const IssuesListTableOfStaff = ({ issues, updateStatus }) => {
                         onClick={() => updateStatus(issue._id, "Resolved")}
                         className="px-4 py-1.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 border border-emerald-200 hover:bg-emerald-200 transition-colors"
                       >
-                        Resolved
+                        Resolve
                       </button>
                     )}
                     {issue.status === "Resolved" && (
@@ -86,7 +86,7 @@ const IssuesListTableOfStaff = ({ issues, updateStatus }) => {
                         onClick={() => updateStatus(issue._id, "Closed")}
                         className="px-4 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200 transition-colors"
                       >
-                        Closed
+                        Close
                       </button>
                     )}
                   </td>

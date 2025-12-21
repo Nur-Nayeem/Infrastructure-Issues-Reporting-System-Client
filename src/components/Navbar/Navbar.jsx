@@ -20,7 +20,7 @@ const Navbar = ({ open, setOpen }) => {
       <Logo />
 
       {/* Navigation Links using NavLink */}
-      <div className="hidden md:flex flex-1 justify-center items-center gap-10">
+      <div className="hidden lg:flex flex-1 justify-center items-center gap-10">
         {navLinks.map((link) => (
           <NavLink key={link.to} to={link.to} className="nav-styles">
             {link.label}
@@ -78,7 +78,7 @@ const Navbar = ({ open, setOpen }) => {
             <Link to={"/login"} className="btn-secondary">
               Login
             </Link>
-            <Link to={"/register"} className="btn-primary">
+            <Link to={"/register"} className="btn-primary hidden sm:flex">
               Register
             </Link>
           </div>

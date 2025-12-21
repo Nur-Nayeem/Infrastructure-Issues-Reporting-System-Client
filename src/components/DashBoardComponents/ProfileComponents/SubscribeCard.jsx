@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { FaDollarSign } from "react-icons/fa";
-import useAxios from "../../../hooks/useAxios";
 import toast from "react-hot-toast";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 export const SubscribeCard = ({ user }) => {
   const [loading, setLoading] = useState(false);
-  const axiosInstance = useAxios();
+  const axiosSecureInstance = useAxiosSecure();
   const handleSubscribe = async () => {
     try {
       setLoading(true);
 
-      const res = await axiosInstance.post("/subscriptions/checkout", {
+      const res = await axiosSecureInstance.post("/subscriptions/checkout", {
         userId: user._id,
       });
 

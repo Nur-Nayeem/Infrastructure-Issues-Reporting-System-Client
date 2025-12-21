@@ -12,11 +12,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import AssignTaskModal from "../../components/DashBoardComponents/modals/AssignTaskModal";
 import RejectIssueModal from "../../components/DashBoardComponents/modals/RejectIssueModal";
 import AllIssuesTable from "../../components/DashBoardComponents/Tables/AllIssuesTable";
-import useAxios from "../../hooks/useAxios";
 import toast from "react-hot-toast";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 export const AdminAllIssuesPage = () => {
-  const axiosInstance = useAxios();
+  const axiosSecureInstance = useAxiosSecure();
   const queryClient = useQueryClient();
 
   const [filter, setFilter] = useState("All");
@@ -34,7 +34,7 @@ export const AdminAllIssuesPage = () => {
   } = useQuery({
     queryKey: ["issues"],
     queryFn: async () => {
-      const res = await axiosInstance.get("/issues");
+      const res = await axiosSecureInstance.get("/issues");
       return res.data.result;
     },
   });
@@ -43,7 +43,7 @@ export const AdminAllIssuesPage = () => {
     queryKey: ["staff", "active"],
     enabled: !!selectedIssue,
     queryFn: async () => {
-      const res = await axiosInstance.get("/staff?status=active");
+      const res = await axiosSecureInstance.get("/staff?status=active");
       return res.data;
     },
   });
@@ -52,7 +52,7 @@ export const AdminAllIssuesPage = () => {
 
   const rejectMutation = useMutation({
     mutationFn: async (issueId) => {
-      return axiosInstance.patch(`/issues/${issueId}/rejected`);
+      return axiosSecureInstance.patch(`/issues/${issueId}/rejected`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["issues"]);
@@ -67,7 +67,7 @@ export const AdminAllIssuesPage = () => {
   const handleAssignStaff = (issueId, staff) => {
     console.log("Assigned:", issueId, staff);
 
-    axiosInstance
+    axiosSecureInstance
       .patch(`/issues/${issueId}/assign-staff`, {
         staffEmail: staff,
       })

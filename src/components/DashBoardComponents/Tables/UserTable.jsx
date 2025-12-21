@@ -1,5 +1,5 @@
 import React from "react";
-import { FaBan, FaCheckCircle, FaCrown, FaEye, FaUser } from "react-icons/fa";
+import { FaBan, FaCheckCircle, FaCrown, FaUser } from "react-icons/fa";
 
 const UserTable = ({ users, setShowBlockModal }) => {
   return (
@@ -17,9 +17,6 @@ const UserTable = ({ users, setShowBlockModal }) => {
               </th>
               <th className="text-left p-4 text-slate-400 font-medium">
                 Issues
-              </th>
-              <th className="text-left p-4 text-slate-400 font-medium">
-                Payments
               </th>
               <th className="text-left p-4 text-slate-400 font-medium">
                 Actions
@@ -86,14 +83,7 @@ const UserTable = ({ users, setShowBlockModal }) => {
                   <div className="text-xs text-slate-400">reported</div>
                 </td>
                 <td className="p-4">
-                  <div className="text-slate-100">{user.payments}</div>
-                  <div className="text-xs text-slate-400">total</div>
-                </td>
-                <td className="p-4">
                   <div className="flex items-center gap-2">
-                    <button className="p-1.5 text-blue-400 hover:text-blue-300">
-                      <FaEye />
-                    </button>
                     <button
                       onClick={() => {
                         setShowBlockModal(user.email);

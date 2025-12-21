@@ -20,7 +20,7 @@ const MainLayout = () => {
           <Navbar open={open} setOpen={setOpen} />
         </header>
         <Toaster />
-        <main>
+        <main className="px-2.5">
           <Outlet />
         </main>
         <Footer />

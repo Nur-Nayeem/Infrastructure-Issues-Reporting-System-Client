@@ -4,8 +4,8 @@ import { FaMapMarkerAlt, FaTimes } from "react-icons/fa";
 import { MdDescription, MdOutlineFileUpload, MdTitle } from "react-icons/md";
 import { BiCategory } from "react-icons/bi";
 import toast from "react-hot-toast";
-import useAxios from "../../../hooks/useAxios";
 import { imageUpload } from "../../../lib";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const EditIssueModal = ({ isOpen, onClose, issue, refetch }) => {
   const {
@@ -17,7 +17,7 @@ const EditIssueModal = ({ isOpen, onClose, issue, refetch }) => {
 
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
-  const axiosInstance = useAxios();
+  const axiosSecureInstance = useAxiosSecure();
 
   useEffect(() => {
     if (issue) {
@@ -52,7 +52,7 @@ const EditIssueModal = ({ isOpen, onClose, issue, refetch }) => {
         image: imageURL,
       };
 
-      const res = await axiosInstance.patch(
+      const res = await axiosSecureInstance.patch(
         `/issues/${issue._id}`,
         updatedIssue
       );

@@ -1,17 +1,18 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router";
-import useAxios from "../../hooks/useAxios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const PaymentSuccess = () => {
   const [params] = useSearchParams();
   const sessionId = params.get("session_id");
-  const axiosInstance = useAxios();
+  // const axiosInstance = useAxios();
+  const axiosSecureInstance = useAxiosSecure();
 
   useEffect(() => {
     if (sessionId) {
-      axiosInstance.post("/payments/confirm", { sessionId });
+      axiosSecureInstance.post("/payments/confirm", { sessionId });
     }
-  }, [sessionId, axiosInstance]);
+  }, [sessionId, axiosSecureInstance]);
 
   return (
     <div className="text-center my-20">

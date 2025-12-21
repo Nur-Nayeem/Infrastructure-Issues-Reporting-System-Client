@@ -7,16 +7,18 @@ import IssuesStatisticsChart from "../../components/DashBoardComponents/Charts/I
 import TaskCard from "../../components/cards/TaskCard";
 import useAuth from "../../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
-import useAxios from "../../hooks/useAxios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 export const StaffDashboardPage = () => {
   const { user } = useAuth();
-  const axiosInstance = useAxios();
+  const axiosSecureInstance = useAxiosSecure();
 
   const { data: issues = [] } = useQuery({
     queryKey: ["issues", user?.email],
     queryFn: async () => {
-      const res = await axiosInstance.get(`/issues?assignedto=${user?.email}`);
+      const res = await axiosSecureInstance.get(
+        `/issues?assignedto=${user?.email}`
+      );
       return res.data.result;
     },
   });
@@ -24,7 +26,7 @@ export const StaffDashboardPage = () => {
   //resolved tasks:
 
   const resolvedTask = issues.filter((issue) => {
-    if (issue.status === "Resolved") return true;
+    if (issue.status === "Resolved" || issue.status === "Closed") return true;
     return false;
   });
 
@@ -34,7 +36,7 @@ export const StaffDashboardPage = () => {
   // Filter today's tasks
   const todaysTasks = issues.filter((issue) => {
     if (!issue.assignedAt) return false;
-
+    if (issue.status === "Resolved" || issue.status === "Closed") return false;
     const assignedDate = new Date(issue.assignedAt).toISOString().split("T")[0];
 
     return assignedDate === today;
@@ -79,7 +81,7 @@ export const StaffDashboardPage = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Performance Chart */}
-        <IssuesStatisticsChart />
+        <IssuesStatisticsChart issues={issues} />
 
         {/* Today's Tasks */}
         <div className="bg-surface-dark rounded-xl p-6 border border-slate-800">
@@ -89,17 +91,25 @@ export const StaffDashboardPage = () => {
             </h3>
             <FaTasks className="text-slate-400" />
           </div>
-          <div className="space-y-4">
-            {todaysTasks.map((task, index) => (
-              <TaskCard key={index} task={task} />
-            ))}
-          </div>
-          <Link
-            to={"/dashboard/staff/assigned-issues"}
-            className="w-full flex items-center justify-center mt-4 py-2 border border-slate-700 rounded-lg hover:border-slate-600 transition-colors"
-          >
-            View All Tasks
-          </Link>
+          {todaysTasks.length ? (
+            <>
+              <div className="space-y-4">
+                {todaysTasks.map((task, index) => (
+                  <TaskCard key={index} task={task} />
+                ))}
+              </div>
+              <Link
+                to={"/dashboard/staff/assigned-issues"}
+                className="w-full flex items-center justify-center mt-4 py-2 border border-slate-700 rounded-lg hover:border-slate-600 transition-colors"
+              >
+                View All Tasks
+              </Link>
+            </>
+          ) : (
+            <div className="text-center flex justify-center items-center h-[70%]">
+              <h2>There is no more task today</h2>
+            </div>
+          )}
         </div>
       </div>
     </div>

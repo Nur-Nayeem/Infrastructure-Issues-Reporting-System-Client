@@ -10,21 +10,21 @@ import {
 } from "react-icons/fa";
 import { Link } from "react-router";
 import MyIssueCard from "../../components/DashBoardComponents/myIssueCard/MyIssueCard";
-import useAxios from "../../hooks/useAxios";
 import useAuth from "../../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 export const MyIssuesPage = () => {
   const [filtered, setFiltered] = useState("all");
   const [search, setSearch] = useState("");
   const { user } = useAuth();
-  const axiosInstance = useAxios();
+  const axiosSecureInstanse = useAxiosSecure();
 
   const { data: issues = [], refetch } = useQuery({
     queryKey: ["my-issues", user?.email],
     queryFn: async () => {
-      const res = await axiosInstance.get(`/issues?email=${user?.email}`);
-      return res.data.result;
+      const res = await axiosSecureInstanse.get(`/my-issues/${user?.email}`);
+      return res.data;
     },
   });
   console.log(issues);

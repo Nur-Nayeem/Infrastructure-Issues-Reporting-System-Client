@@ -14,37 +14,41 @@ const IssuePage = () => {
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
-  // const { scrollYProgress } = useScroll();
   const limit = 6;
 
   useEffect(() => {
-    let categoryQuery = category === "All Categories" ? "" : category;
-    let statusQuery = status === "Any Status" ? "" : status;
-    let priorityQuery = priority === "Any Priority" ? "" : priority;
-    setLoading(true);
-    axiosInstance
-      .get(
-        `/issues?recent=true&limit=${limit}&skip=${
-          (currentPage - 1) * limit
-        }&category=${categoryQuery}&status=${statusQuery}&priority=${priorityQuery}&search=${searchText}`
-      )
-      .then((data) => {
-        console.log(data.data.result);
-        setIssues(data.data.result);
-        const page = Math.ceil(data.data.total / limit);
-        setTotalPage(page);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
+    const fetchIssues = () => {
+      let categoryQuery = category === "All Categories" ? "" : category;
+      let statusQuery = status === "Any Status" ? "" : status;
+      let priorityQuery = priority === "Any Priority" ? "" : priority;
+      setLoading(true);
+      axiosInstance
+        .get(
+          `/issues?recent=true&limit=${limit}&skip=${
+            (currentPage - 1) * limit
+          }&category=${categoryQuery}&status=${statusQuery}&priority=${priorityQuery}&search=${searchText}`
+        )
+        .then((data) => {
+          console.log(data.data.result);
+          setIssues(data.data.result);
+          const page = Math.ceil(data.data.total / limit);
+          setTotalPage(page);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    };
+    fetchIssues();
   }, [axiosInstance, category, searchText, currentPage, priority, status]);
 
   console.log(category, status, priority);
 
   if (loading) {
-    // return
+    return (
+      <div className="text-white text-center py-20">Loading issues...</div>
+    );
   }
 
   return (
@@ -71,7 +75,7 @@ const IssuePage = () => {
               the community.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
             {issues.map((issue, index) => (
               <IssueMainCard key={index} issue={issue} />
             ))}

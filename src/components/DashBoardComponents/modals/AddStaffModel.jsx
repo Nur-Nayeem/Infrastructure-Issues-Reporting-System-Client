@@ -5,12 +5,12 @@ import { MdOutlineFileUpload } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { imageUpload } from "../../../lib";
-import useAxios from "../../../hooks/useAxios";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const defaultAvatar = "https://i.ibb.co.com/B26DPRzZ/avater.jpg";
 
 const AddStaffModel = ({ setShowAddModal, setRefetch, refetch }) => {
-  const axiosInstance = useAxios();
+  const axiosSecureInstance = useAxiosSecure();
 
   const {
     register,
@@ -54,7 +54,7 @@ const AddStaffModel = ({ setShowAddModal, setRefetch, refetch }) => {
         role: "staff",
       };
 
-      await axiosInstance.post("/create-staff", staffData);
+      await axiosSecureInstance.post("/create-staff", staffData);
       setRefetch(!refetch);
       toast.success("Staff account created");
       setShowAddModal(false);

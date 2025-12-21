@@ -13,18 +13,3 @@ export const imageUpload = async (imageFile) => {
     console.log(err);
   }
 };
-
-export const handleBoostIssue = async (issueId, currentUser) => {
-  const res = await axios.post(
-    "http://localhost:5000/payment-checkout-session",
-    {
-      issueId,
-      userId: currentUser?._id,
-    }
-  );
-  const data = res.data;
-
-  if (data.url) {
-    window.location.href = data.url;
-  }
-};

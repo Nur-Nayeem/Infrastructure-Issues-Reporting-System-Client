@@ -15,10 +15,11 @@ import {
   SubscribeCard,
 } from "../../components/DashBoardComponents/ProfileComponents/SubscribeCard";
 import StatsCard from "../../components/DashBoardComponents/ProfileComponents/StatsCard";
-import useAxios from "../../hooks/useAxios";
 import toast from "react-hot-toast";
 import { imageUpload } from "../../lib";
 import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import LoadingSpinner from "../../components/Shared/Loader";
 
 export const ProfilePage = () => {
   const [loading, setLoading] = useState(false);
@@ -26,10 +27,10 @@ export const ProfilePage = () => {
   const [profileImage, setProfileImage] = useState(null);
 
   const { currentUser, userLoading, refetchUser } = useUser();
-  const axiosInstance = useAxios();
-  const { updateUserProfile } = useAuth();
+  const axiosSecureInstance = useAxiosSecure();
+  const { updateUserProfile, user } = useAuth();
 
-  const [user, setUser] = useState({
+  const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",
     photoURL: "",
@@ -43,7 +44,7 @@ export const ProfilePage = () => {
 
   useEffect(() => {
     if (currentUser) {
-      setUser({
+      setUserInfo({
         name: currentUser.displayName,
         email: currentUser.email,
         photoURL: currentUser.photoURL,
@@ -58,7 +59,7 @@ export const ProfilePage = () => {
     }
   }, [currentUser]);
 
-  if (userLoading) return <p>Loading...</p>;
+  if (userLoading) return <LoadingSpinner />;
   if (!currentUser) return <p>No user found in DB</p>;
 
   const handleSubmit = async (e) => {
@@ -86,12 +87,12 @@ export const ProfilePage = () => {
       };
 
       await updateUserProfile(
-        data.name || currentUser.displayName,
-        imgUrl || currentUser.photoURL
+        data.name || user.displayName,
+        imgUrl || user.photoURL
       );
 
-      await axiosInstance.patch(
-        `/users/update/${currentUser.email}`,
+      await axiosSecureInstance.patch(
+        `/users/update/${user?.email}`,
         finalData
       );
 
@@ -118,7 +119,7 @@ export const ProfilePage = () => {
         Profile Settings
       </h1>
 
-      {user.isBlocked && <BlockedUser />}
+      {userInfo.isBlocked && <BlockedUser />}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
@@ -155,7 +156,7 @@ export const ProfilePage = () => {
                     id="profile-upload"
                     type="file"
                     accept="image/*"
-                    disabled={user.isBlocked}
+                    disabled={userInfo.isBlocked}
                     onChange={handleImageUpload}
                     className="hidden"
                   />
@@ -173,7 +174,7 @@ export const ProfilePage = () => {
                   <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input
                     name="name"
-                    defaultValue={user.name}
+                    defaultValue={userInfo.name}
                     className="input-box"
                   />
                 </div>
@@ -188,7 +189,7 @@ export const ProfilePage = () => {
                   <input
                     name="email"
                     disabled
-                    defaultValue={user.email}
+                    defaultValue={userInfo.email}
                     className="input-box"
                   />
                 </div>
@@ -202,7 +203,7 @@ export const ProfilePage = () => {
                   <FaPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input
                     name="phone"
-                    defaultValue={user.phone}
+                    defaultValue={userInfo.phone}
                     className="input-box"
                   />
                 </div>
@@ -216,7 +217,7 @@ export const ProfilePage = () => {
                   <FaLocationDot className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input
                     name="address"
-                    defaultValue={user.address}
+                    defaultValue={userInfo.address}
                     className="input-box"
                   />
                 </div>
@@ -225,7 +226,7 @@ export const ProfilePage = () => {
 
             <button
               type="submit"
-              disabled={loading || user.isBlocked}
+              disabled={loading || userInfo.isBlocked}
               className="btn-primary w-full py-3 mt-4"
             >
               {loading ? "Updating..." : "Update Profile"}
@@ -239,10 +240,10 @@ export const ProfilePage = () => {
               <div className="flex items-center gap-4 mb-4">
                 <div
                   className={`p-3 rounded-full ${
-                    user.isPremium ? "bg-green-500/20" : "bg-slate-800"
+                    userInfo.isPremium ? "bg-green-500/20" : "bg-slate-800"
                   }`}
                 >
-                  {user.isPremium ? (
+                  {userInfo.isPremium ? (
                     <FaCheckCircle className="text-green-400" />
                   ) : (
                     <FaLock className="text-slate-400" />
@@ -252,22 +253,22 @@ export const ProfilePage = () => {
                   <h3 className="font-semibold text-slate-100">Subscription</h3>
                   <p
                     className={`text-sm ${
-                      user.isPremium ? "text-green-400" : "text-slate-400"
+                      userInfo.isPremium ? "text-green-400" : "text-slate-400"
                     }`}
                   >
-                    {user.isPremium ? "Premium User" : "Free User"}
+                    {userInfo.isPremium ? "Premium User" : "Free User"}
                   </p>
                 </div>
               </div>
 
-              {!user.isPremium && !user.isBlocked ? (
+              {!userInfo.isPremium && !userInfo.isBlocked ? (
                 <SubscribeCard user={currentUser} refetchUser={refetchUser} />
-              ) : user.isPremium ? (
+              ) : userInfo.isPremium ? (
                 <PremiumUserCard user={currentUser} />
               ) : null}
             </div>
 
-            <StatsCard user={user} currentUser={currentUser} />
+            <StatsCard user={userInfo} currentUser={currentUser} />
           </div>
         )}
       </div>

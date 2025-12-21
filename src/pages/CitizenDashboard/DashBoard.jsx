@@ -10,17 +10,19 @@ import {
 import { Link } from "react-router";
 import { StatCard } from "../../components/DashBoardComponents/StatCard/StatCard";
 import useAuth from "../../hooks/useAuth";
-import useAxios from "../../hooks/useAxios";
 import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 export const DashboardPage = () => {
   const { user } = useAuth();
-  const axiosInstance = useAxios();
+  const axiosSecureInstance = useAxiosSecure();
 
   const { data: issues = [] } = useQuery({
     queryKey: ["issues", user?.email],
     queryFn: async () => {
-      const res = await axiosInstance.get(`/issues?reportedby=${user?.email}`);
+      const res = await axiosSecureInstance.get(
+        `/issues?reportedby=${user?.email}`
+      );
       return res.data.result;
     },
   });

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   LineChart,
   Line,
@@ -10,44 +10,57 @@ import {
 } from "recharts";
 import { FaDollarSign } from "react-icons/fa";
 
-const ReceivedPaymentsChart = () => {
-  const dataChart = [
-    { date: "Jan", count: 12000 },
-    { date: "Feb", count: 15000 },
-    { date: "Mar", count: 18000 },
-    { date: "Apr", count: 16500 },
-    { date: "May", count: 21000 },
-    { date: "Jun", count: 19500 },
-    { date: "Jul", count: 23000 },
-    { date: "Aug", count: 22000 },
-    { date: "Sep", count: 26000 },
-    { date: "Oct", count: 28000 },
-    { date: "Nov", count: 25000 },
-    { date: "Dec", count: 30000 },
-  ];
+const ReceivedPaymentsChart = ({ payments = [] }) => {
+  const chartData = useMemo(() => {
+    const map = {};
+
+    payments.forEach((payment) => {
+      if (!payment.createdAt || !payment.amount) return;
+
+      const date = new Date(payment.createdAt).toISOString().split("T")[0]; // YYYY-MM-DD
+
+      if (!map[date]) {
+        map[date] = { date, amount: 0 };
+      }
+
+      map[date].amount += Number(payment.amount);
+    });
+
+    // Generate last 7 days
+    const today = new Date();
+    const last7Days = [];
+
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      const key = d.toISOString().split("T")[0];
+
+      last7Days.push({
+        date: key,
+        amount: map[key]?.amount || 0,
+      });
+    }
+
+    return last7Days;
+  }, [payments]);
 
   return (
     <div className="bg-surface-dark rounded-xl p-6 border border-slate-800">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-semibold text-slate-100">
-          Received Payments
+          Received Payments (Last 7 Days)
         </h3>
         <FaDollarSign className="text-slate-400" />
       </div>
 
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            data={dataChart}
-            margin={{ top: 10, right: 20, bottom: 0, left: 0 }}
-          >
+          <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-            <XAxis dataKey="date" tick={{ fontSize: 11, fill: "#94a3b8" }} />
-            <YAxis
-              allowDecimals={false}
-              tick={{ fontSize: 11, fill: "#94a3b8" }}
-            />
+            <XAxis dataKey="date" tick={{ fill: "#94a3b8", fontSize: 11 }} />
+            <YAxis tick={{ fill: "#94a3b8", fontSize: 11 }} />
             <Tooltip
+              formatter={(value) => [`৳${value}`, "Amount"]}
               contentStyle={{
                 backgroundColor: "#020617",
                 border: "1px solid #1e293b",
@@ -57,7 +70,7 @@ const ReceivedPaymentsChart = () => {
             />
             <Line
               type="monotone"
-              dataKey="count"
+              dataKey="amount"
               stroke="#4f46e5"
               strokeWidth={2}
               dot={{ r: 3 }}

@@ -10,10 +10,15 @@ import useUser from "../../hooks/useUser";
 import useAxios from "../../hooks/useAxios";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAuth from "../../hooks/useAuth";
+import LoadingSpinner from "../../components/Shared/Loader";
 const IssueDetails = () => {
   const navigate = useNavigate();
   const { currentUser } = useUser();
+  const { user } = useAuth();
   const axiosInstance = useAxios();
+  const axiosSecureInstance = useAxiosSecure();
   const { id } = useParams();
 
   const {
@@ -54,30 +59,50 @@ const IssueDetails = () => {
 
   const handleUpvote = async () => {
     try {
-      await axiosInstance.patch(`/issues/${issue?._id}/upvote`, {
-        email: currentUser.email,
-      });
-
-      toast.success("Upvoted successfully");
-      refetchDetails();
+      if (user) {
+        await axiosInstance.patch(`/issues/${issue?._id}/upvote`, {
+          email: currentUser?.email,
+        });
+        toast.success("Upvoted successfully");
+        refetchDetails();
+      } else {
+        toast.error("Login first");
+        navigate("/login");
+      }
     } catch (err) {
       toast.error(err.response?.data?.message || "Already upvoted");
     }
   };
 
-  const handleDelete = () => {
-    if (window.confirm("Are you sure you want to delete this issue?")) {
-      alert("Issue Deleted");
-      //   navigate("/my-issues");
+  const handleDeleteIssue = () => {
+    if (!window.confirm("Are you sure you want to delete this issue?")) return;
+
+    axiosSecureInstance
+      .delete(`/issues/${issue._id}`)
+      .then((res) => {
+        console.log(res);
+        toast.success("Deleted Issue");
+        navigate("/all-issues");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Error To Delete");
+      });
+  };
+
+  const handleBoostIssue = async (issueId) => {
+    const res = await axiosSecureInstance.post("/payment-checkout-session", {
+      issueId,
+      userId: currentUser?._id,
+    });
+    const data = res.data;
+
+    if (data.url) {
+      window.location.href = data.url;
     }
   };
 
-  if (isLoading)
-    return (
-      <div className="h-96 flex justify-center items-center">
-        <h2>Loafing...</h2>
-      </div>
-    );
+  if (isLoading) return <LoadingSpinner />;
 
   return (
     <div className="container mx-auto px-4 py-8 md:px-6 lg:px-8 max-w-7xl">
@@ -132,8 +157,9 @@ const IssueDetails = () => {
             issue={issue}
             isOwner={isOwner}
             isPending={isPending}
-            handleDelete={handleDelete}
+            handleDelete={handleDeleteIssue}
             refetchDetails={refetchDetails}
+            handleBoostIssue={handleBoostIssue}
           />
 
           {/* assigned staff */}

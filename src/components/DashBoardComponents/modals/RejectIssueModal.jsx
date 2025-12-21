@@ -19,17 +19,6 @@ const RejectIssueModal = ({
           undone.
         </p>
 
-        <div className="mb-6">
-          <label className="block text-sm text-slate-400 mb-2">
-            Reason for rejection (optional)
-          </label>
-          <textarea
-            className="input-box"
-            rows={3}
-            placeholder="Provide reason for rejection..."
-          />
-        </div>
-
         <div className="flex gap-3">
           <button
             onClick={() => setShowRejectModal(null)}

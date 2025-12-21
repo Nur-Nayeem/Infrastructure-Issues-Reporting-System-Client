@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from "react";
 import BlockModal from "../../components/DashBoardComponents/modals/BlockModal";
-import useAxios from "../../hooks/useAxios";
 import UserTable from "../../components/DashBoardComponents/Tables/UserTable";
 import toast from "react-hot-toast";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 export const AdminManageUsersPage = () => {
   const [showBlockModal, setShowBlockModal] = useState(null);
   const [refetch, setRefetch] = useState(false);
 
   const [users, setUsers] = useState([]);
-  const axiosInstance = useAxios();
+  const axiosSecureInstance = useAxiosSecure();
 
   useEffect(() => {
-    axiosInstance.get("/users?role=citizen").then((res) => setUsers(res.data));
-  }, [axiosInstance, refetch]);
+    axiosSecureInstance
+      .get("/users?role=citizen")
+      .then((res) => setUsers(res.data));
+  }, [axiosSecureInstance, refetch]);
 
   const toggleUserBlock = (email) => {
     console.log(email);
 
-    axiosInstance
+    axiosSecureInstance
       .patch(`/users/${email}/blocked`)
       .then(() => {
         toast.success(`success`);

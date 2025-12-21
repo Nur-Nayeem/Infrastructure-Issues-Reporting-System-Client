@@ -4,11 +4,13 @@ import { FaFilter } from "react-icons/fa";
 import useAxios from "../../hooks/useAxios";
 import useAuth from "../../hooks/useAuth";
 import IssuesListTableOfStaff from "../../components/DashBoardComponents/Tables/IssuesListTableOfStaff";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 export const StaffAssignedIssuesPage = () => {
   const [statusFilter, setStatusFilter] = useState("All");
   const [priorityFilter, setPriorityFilter] = useState("All");
   const axiosInstance = useAxios();
+  const axiosSecureInstance = useAxiosSecure();
   const { user } = useAuth();
   const { data: issues = [], refetch: refetchIssues } = useQuery({
     queryKey: ["issues", user?.email],
@@ -18,12 +20,14 @@ export const StaffAssignedIssuesPage = () => {
     },
   });
   const updateStatus = async (issueId, newStatus) => {
-    await axiosInstance.patch(`/issues/${issueId}/status`, {
+    await axiosSecureInstance.patch(`/issues/${issueId}/status`, {
       status: newStatus,
       userEmail: user?.email,
     });
     refetchIssues();
   };
+
+  console.log(user);
 
   const filteredIssues = issues.filter((issue) => {
     if (statusFilter !== "All" && issue.status !== statusFilter) return false;
