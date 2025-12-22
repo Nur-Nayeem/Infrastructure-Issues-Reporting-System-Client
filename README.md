@@ -107,11 +107,16 @@ Each timeline entry includes:
 
 ## Installation
 
-### 1. Clone the repository
+### 1. Clone the Server repository
 
 ```bash
-git clone https://github.com/your-username/cityfix.git
-cd cityfix
+git clone https://github.com/Nur-Nayeem/Infrastructure-Issues-Reporting-System-Server.git
+```
+
+### 1. Clone the Cloient repository
+
+```bash
+git clone https://github.com/Nur-Nayeem/Infrastructure-Issues-Reporting-System-Client.git
 ```
 
 ### 2. Install Backend Dependencies
