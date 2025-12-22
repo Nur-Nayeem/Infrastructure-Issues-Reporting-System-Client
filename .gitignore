@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 .env
 src/pages/IssueDetailsPage/TestDetails.jsx
+
+firebase.json
+.firebaserc
+.firebase
