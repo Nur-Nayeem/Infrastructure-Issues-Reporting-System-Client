@@ -24,6 +24,8 @@ import SubcriptionCancel from "../pages/Payments/SubcriptionCancel";
 import AdminRoute from "./AdminRoute/AdminRoute";
 import StaffRoute from "./StaffRoute/StaffRoute";
 import NotFound from "../components/Shared/NotFound";
+import AboutUsSection from "../pages/AboutUs/AboutUs";
+import ServiceCoveragePage from "../pages/ServiceCoverage/ServiceCoverage";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +43,14 @@ const router = createBrowserRouter([
       {
         path: "all-issues/:id",
         element: <IssueDetails />,
+      },
+      {
+        path: "about-us",
+        element: <AboutUsSection />,
+      },
+      {
+        path: "coverage",
+        element: <ServiceCoveragePage />,
       },
       {
         path: "payment-success",
