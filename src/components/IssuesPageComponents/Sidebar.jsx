@@ -48,13 +48,11 @@ const Sidebar = ({
             className="w-full bg-surface-dark border border-slate-800 rounded-lg py-2 px-3 text-sm text-white outline-0 focus:ring-1 focus:ring-primary focus:border-primary transition"
             onChange={handleCategoryChange}
           >
-            //TODO:category list must be change
             <option value={"All Categories"}>All Categories</option>
-            <option value={"Infrastructure"}>Infrastructure</option>
-            <option value={"Road"}>Road</option>
-            <option value={"sanitation"}>sanitation</option>
-            <option value={"Electricity"}>Electricity</option>
-            <option value={"Water Supply"}>Water Supply</option>
+            <option value={"infrastructure"}>Infrastructure</option>
+            <option value={"sanitation"}>Sanitation</option>
+            <option value={"electricity"}>Electricity</option>
+            <option value={"water supply"}>Water Supply</option>
           </select>
         </div>
         <div className="flex flex-col gap-4">
@@ -68,7 +66,8 @@ const Sidebar = ({
           >
             <option value={"Any Status"}>Any Status</option>
             <option value={"Resolved"}>Resolved</option>
-            <option value={"In Progress"}>In Progress</option>
+            <option value={"In-Progress"}>In-Progress</option>
+            <option value={"Working"}>Working</option>
             <option value={"Pending"}>Pending</option>
             <option value={"Closed"}>Closed</option>
           </select>
