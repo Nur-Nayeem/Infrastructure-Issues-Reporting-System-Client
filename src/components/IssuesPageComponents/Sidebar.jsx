@@ -52,7 +52,7 @@ const Sidebar = ({
             <option value={"infrastructure"}>Infrastructure</option>
             <option value={"sanitation"}>Sanitation</option>
             <option value={"electricity"}>Electricity</option>
-            <option value={"water supply"}>Water Supply</option>
+            <option value={"water"}>Water Supply</option>
           </select>
         </div>
         <div className="flex flex-col gap-4">

@@ -27,6 +27,15 @@ export const DashboardPage = () => {
     },
   });
 
+  const { data: payments = [] } = useQuery({
+    queryKey: ["payments", user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axiosSecureInstance.get("/payments/user");
+      return res.data;
+    },
+  });
+
   const resolvedTask = issues.filter((issue) => {
     if (issue.status === "Resolved") return true;
     return false;
@@ -39,6 +48,11 @@ export const DashboardPage = () => {
     if (issue.status === "In-Progress") return true;
     return false;
   });
+
+  const totalPayments = payments.reduce(
+    (sum, payment) => sum + Number(payment.amount || 0),
+    0
+  );
 
   const stats = [
     {
@@ -67,7 +81,7 @@ export const DashboardPage = () => {
     },
     {
       title: "Total Payments",
-      value: "৳2,400",
+      value: `৳${totalPayments}`,
       icon: <FaDollarSign />,
       color: "bg-purple-500/20 text-purple-400",
     },

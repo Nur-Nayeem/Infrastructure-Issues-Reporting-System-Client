@@ -54,8 +54,8 @@ const IssueMainCard = ({ issue }) => {
         </div>
         <div className="flex items-center justify-between mt-auto pt-2 border-t border-slate-800">
           <div className="flex items-center gap-3">
-            <button className="group flex items-center justify-center h-10 gap-2 px-3 rounded-full bg-slate-800/50 hover:bg-primary/20 border border-slate-700 hover:border-primary/50 transition-colors">
-              <BiUpvote className="text-slate-400 group-hover:text-primary transition-colors text-xl" />
+            <button className="group flex items-center justify-center h-10 gap-2 px-3 rounded-full bg-slate-800/50  border border-slate-700  transition-colors">
+              <BiUpvote className="text-slate-400 transition-colors text-xl" />
               <span className="text-base font-semibold text-white">
                 {issue.upvoted}
               </span>
