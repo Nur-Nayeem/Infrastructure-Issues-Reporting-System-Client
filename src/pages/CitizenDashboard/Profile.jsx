@@ -20,6 +20,8 @@ import { imageUpload } from "../../lib";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import LoadingSpinner from "../../components/Shared/Loader";
+import { useQuery } from "@tanstack/react-query";
+import PaymentHistoryCard from "../../components/cards/PayemntHistoryCard";
 
 export const ProfilePage = () => {
   const [loading, setLoading] = useState(false);
@@ -30,6 +32,14 @@ export const ProfilePage = () => {
   const axiosSecureInstance = useAxiosSecure();
   const { updateUserProfile, user } = useAuth();
 
+  const { data: paymentHistory = [] } = useQuery({
+    queryKey: ["my-payments"],
+    queryFn: async () => {
+      const res = await axiosSecureInstance.get("/payments/user");
+      return res.data;
+    },
+  });
+
   const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",
@@ -39,7 +49,7 @@ export const ProfilePage = () => {
     isPremium: false,
     isBlocked: false,
     subscriptionDate: null,
-    totalPayments: "৳0",
+    totalPayments: "0",
   });
 
   useEffect(() => {
@@ -267,6 +277,7 @@ export const ProfilePage = () => {
             </div>
 
             <StatsCard user={userInfo} currentUser={currentUser} />
+            <PaymentHistoryCard payments={paymentHistory} />
           </div>
         )}
       </div>

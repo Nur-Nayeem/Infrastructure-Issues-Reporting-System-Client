@@ -7,13 +7,12 @@ const BlockModal = ({ setShowBlockModal, showBlockModal, toggleUserBlock }) => {
       <div className="bg-surface-dark rounded-xl p-6 max-w-md w-full border border-slate-800">
         <div className="flex items-center gap-3 mb-6">
           <FaExclamationTriangle className="text-red-400" />
-          <h3 className="text-xl font-semibold text-slate-100">Block User</h3>
+          <h3 className="text-xl font-semibold text-slate-100">
+            Block/UnBlocking User
+          </h3>
         </div>
 
-        <p className="text-slate-300 mb-4">
-          Are you sure you want to block this user? They will not be able to
-          submit, edit, upvote, or boost issues.
-        </p>
+        <p className="text-slate-300 mb-4">Are you sure you want to do this?</p>
         <div className="flex gap-3">
           <button
             onClick={() => {
@@ -30,7 +29,7 @@ const BlockModal = ({ setShowBlockModal, showBlockModal, toggleUserBlock }) => {
             }}
             className="flex-1 px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
           >
-            Block User
+            Yes
           </button>
         </div>
       </div>

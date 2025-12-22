@@ -59,6 +59,9 @@ export const AdminDashboardPage = () => {
   const latestUsers = [...users]
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 3);
+  const latestPayments = [...payments]
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 3);
 
   const resolvedTask = issues.filter((issue) => {
     if (issue.status === "Resolved") return true;
@@ -183,7 +186,7 @@ export const AdminDashboardPage = () => {
             </Link>
           </div>
           <div className="divide-y divide-slate-800/50">
-            {payments.map((payment, index) => (
+            {latestPayments.map((payment, index) => (
               <PayementCard key={index} payment={payment} />
             ))}
           </div>

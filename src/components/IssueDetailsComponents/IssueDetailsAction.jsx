@@ -26,7 +26,7 @@ const IssueDetailsAction = ({
 
         <div className="space-y-3">
           {issue.priority === "Low" &&
-            issue.status !== "Resolved" &&
+            issue.status === "Pending" &&
             role === "citizen" && (
               <button
                 onClick={() => handleBoostIssue(issue._id)}

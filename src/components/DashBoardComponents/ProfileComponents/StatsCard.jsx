@@ -12,12 +12,6 @@ const StatsCard = ({ currentUser, user }) => {
           </span>
         </div>
         <div className="flex justify-between">
-          <span>Total Payments</span>
-          <span className="text-slate-100">
-            {user.isPremium ? "৳1000" : "৳0"}
-          </span>
-        </div>
-        <div className="flex justify-between">
           <span>Joined</span>
           <span className="text-slate-100">
             {new Date(currentUser.createdAt).toLocaleString("default", {

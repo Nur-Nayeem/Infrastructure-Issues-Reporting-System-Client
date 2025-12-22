@@ -3,6 +3,8 @@ import React, { useMemo, useState } from "react";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import LoadingSpinner from "../../components/Shared/Loader";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import InvoiceDocument from "../Payments/Invoice";
 
 const AdminPaymentsPage = () => {
   const axiosSecureInstance = useAxiosSecure();
@@ -73,6 +75,7 @@ const AdminPaymentsPage = () => {
               <th className="px-4 py-3 text-left">Amount</th>
               <th className="px-4 py-3 text-left">Status</th>
               <th className="px-4 py-3 text-left">Date</th>
+              <th className="px-4 py-3 text-left">Invoice</th>
             </tr>
           </thead>
 
@@ -111,6 +114,17 @@ const AdminPaymentsPage = () => {
                   </td>
                   <td className="px-4 py-3 text-slate-400">
                     {new Date(payment.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-4 py-3">
+                    <PDFDownloadLink
+                      document={<InvoiceDocument payment={payment} />}
+                      fileName={`invoice-${payment.paymentId}.pdf`}
+                      className="text-blue-400 hover:underline"
+                    >
+                      {({ loading }) =>
+                        loading ? "Generating..." : "Download"
+                      }
+                    </PDFDownloadLink>
                   </td>
                 </tr>
               ))

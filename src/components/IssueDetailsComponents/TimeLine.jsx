@@ -9,21 +9,23 @@ export default function StyledTimeline({ timeline = [] }) {
   }
 
   const stasColors = {
-    Pending: "#FACC15",
+    "Isssue Created": "#2596be",
+    "Issue Boosted": "#FACC15",
+    "Assigned Staff": "#591673",
     "In-Progress": "#3B82F6",
     Working: "#FB923C",
     Resolved: "#22C55E",
     Closed: "#64748B",
     Rejected: "#EF4444",
   };
-
-  // Convert DB timeline to PrimeReact format
-  const events = timeline.map((item) => ({
-    status: item.status,
-    date: new Date(item.changedAt).toLocaleString(),
-    color: stasColors[item.status] || "#94A3B8",
-    changedBy: item.changedBy,
-  }));
+  const events = [...timeline]
+    .sort((a, b) => new Date(b.changedAt) - new Date(a.changedAt))
+    .map((item) => ({
+      status: item.status,
+      date: new Date(item.changedAt).toLocaleString(),
+      color: stasColors[item.status] || "#94A3B8",
+      changedBy: item.changedBy,
+    }));
 
   const customizedMarker = (item) => (
     <span
