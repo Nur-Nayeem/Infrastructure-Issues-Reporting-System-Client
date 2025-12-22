@@ -75,7 +75,7 @@ const MyIssueCard = ({ issue, getStatusIcon, refetch }) => {
           </div>
 
           <div className="flex gap-2">
-            {issue.priority === "Low" && (
+            {issue.priority === "Low" && issue.status === "Pending" && (
               <button
                 onClick={() => handleBoostIssue(issue._id, currentUser)}
                 className="p-2 bg-yellow-500/20 text-yellow-500 rounded-lg hover:bg-yellow-500/30 cursor-pointer"

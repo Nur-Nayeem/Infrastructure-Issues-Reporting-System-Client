@@ -130,6 +130,13 @@ const SideBar = ({ setSidebarOpen, sidebarOpen, user }) => {
                     Premium
                   </span>
                 )}
+                {user?.role === "staff" && (
+                  <span
+                    className={`px-2 py-0.5 text-xs font-bold bg-yellow-600 text-yellow-100 rounded-full`}
+                  >
+                    Staff
+                  </span>
+                )}
               </div>
             </div>
           </div>

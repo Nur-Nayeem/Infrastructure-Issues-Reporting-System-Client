@@ -8,12 +8,7 @@ import AsssignStaff from "../../components/IssueDetailsComponents/AsssignStaff";
 import DetailsContent from "../../components/IssueDetailsComponents/DetailsContent";
 import useUser from "../../hooks/useUser";
 import useAxios from "../../hooks/useAxios";
-import {
-  QueryClient,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
@@ -67,7 +62,7 @@ const IssueDetails = () => {
   const handleUpvote = async () => {
     try {
       if (user) {
-        await axiosInstance.patch(`/issues/${issue?._id}/upvote`, {
+        await axiosSecureInstance.patch(`/issues/${issue?._id}/upvote`, {
           email: currentUser?.email,
         });
         toast.success("Upvoted successfully");

@@ -11,7 +11,7 @@ const LatestIssueCard = ({ issue }) => {
         <div className="flex flex-col items-end gap-1">
           <span
             className={`px-2 py-1 rounded text-xs ${
-              issue.priority === "high"
+              issue.priority === "High"
                 ? "bg-red-500/20 text-red-300"
                 : "bg-slate-700 text-slate-300"
             }`}

@@ -161,7 +161,7 @@ const ServiceCoverage = () => {
         </div>
 
         {/* Search */}
-        <form onSubmit={handleSearch} className="mb-8 max-w-md flex gap-3">
+        <form onSubmit={handleSearch} className="mb-8 max-w-md flex">
           <input
             type="search"
             name="location"

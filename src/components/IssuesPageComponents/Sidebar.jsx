@@ -28,7 +28,12 @@ const Sidebar = ({
     <div className="sticky top-32 flex flex-col gap-8">
       <div className="relative">
         <IoSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
-        <input className="input-box" type="search" onChange={handleSearch} />
+        <input
+          className="input-box"
+          placeholder="Search Issues"
+          type="search"
+          onChange={handleSearch}
+        />
       </div>
       <div className="space-y-6">
         <h3 className="font-display text-lg font-semibold text-white">

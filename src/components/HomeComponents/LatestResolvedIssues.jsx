@@ -9,7 +9,7 @@ const LatestResolvedIssues = () => {
   const { data: latesSolved = [], isLoading } = useQuery({
     queryKey: ["latestSolved"],
     queryFn: async () => {
-      const res = await axiosInstance.get("/issues?status=Resolved&limit=6");
+      const res = await axiosInstance.get("/issues?status=Resolved&limit=8");
       return res.data.result;
     },
   });
