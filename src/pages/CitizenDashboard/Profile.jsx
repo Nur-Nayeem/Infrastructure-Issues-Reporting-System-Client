@@ -174,6 +174,7 @@ export const ProfilePage = () => {
                   <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input
                     name="name"
+                    placeholder="Name"
                     defaultValue={userInfo.name}
                     className="input-box"
                   />
@@ -188,6 +189,7 @@ export const ProfilePage = () => {
                   <MdAlternateEmail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input
                     name="email"
+                    placeholder="Email"
                     disabled
                     defaultValue={userInfo.email}
                     className="input-box"
@@ -203,6 +205,7 @@ export const ProfilePage = () => {
                   <FaPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input
                     name="phone"
+                    placeholder="Phone"
                     defaultValue={userInfo.phone}
                     className="input-box"
                   />
@@ -217,6 +220,7 @@ export const ProfilePage = () => {
                   <FaLocationDot className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input
                     name="address"
+                    placeholder="address"
                     defaultValue={userInfo.address}
                     className="input-box"
                   />

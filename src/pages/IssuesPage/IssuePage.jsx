@@ -1,53 +1,49 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import IssueMainCard from "../../components/cards/IssueMainCard";
 import Sidebar from "../../components/IssuesPageComponents/Sidebar";
 import Pagination from "../../components/IssuesPageComponents/Pagination";
 import useAxios from "../../hooks/useAxios";
+import LoadingSpinner from "../../components/Shared/Loader";
 
 const IssuePage = () => {
   const axiosInstance = useAxios();
-  const [issues, setIssues] = useState([]);
+  const limit = 6;
   const [category, setCategory] = useState("");
   const [status, setStatus] = useState("");
   const [priority, setPriority] = useState("");
-  const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(0);
-  const limit = 6;
 
-  useEffect(() => {
-    const fetchIssues = () => {
-      let categoryQuery = category === "All Categories" ? "" : category;
-      let statusQuery = status === "Any Status" ? "" : status;
-      let priorityQuery = priority === "Any Priority" ? "" : priority;
-      setLoading(true);
-      axiosInstance
-        .get(
-          `/issues?recent=true&limit=${limit}&skip=${
-            (currentPage - 1) * limit
-          }&category=${categoryQuery}&status=${statusQuery}&priority=${priorityQuery}&search=${searchText}`
-        )
-        .then((data) => {
-          console.log(data.data.result);
-          setIssues(data.data.result);
-          const page = Math.ceil(data.data.total / limit);
-          setTotalPage(page);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          setLoading(false);
-        });
-    };
-    fetchIssues();
-  }, [axiosInstance, category, searchText, currentPage, priority, status]);
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["issues", category, status, priority, searchText, currentPage],
+    queryFn: async () => {
+      const categoryQuery = category === "All Categories" ? "" : category;
+      const statusQuery = status === "Any Status" ? "" : status;
+      const priorityQuery = priority === "Any Priority" ? "" : priority;
 
-  console.log(category, status, priority);
+      const response = await axiosInstance.get(
+        `/issues?recent=true&limit=${limit}&skip=${
+          (currentPage - 1) * limit
+        }&category=${categoryQuery}&status=${statusQuery}&priority=${priorityQuery}&search=${searchText}`
+      );
+      return response.data;
+    },
+    placeholderData: (previousData) => previousData,
+  });
 
-  if (loading) {
+  const totalPage = data ? Math.ceil(data.total / limit) : 0;
+  const issues = data?.result || [];
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (isError) {
     return (
-      <div className="text-white text-center py-20">Loading issues...</div>
+      <div className="text-red-400 text-center py-20">
+        Error loading issues: {error.message}
+      </div>
     );
   }
 
@@ -65,6 +61,7 @@ const IssuePage = () => {
             setSearchText={setSearchText}
           />
         </aside>
+
         <section className="flex-1">
           <div className="mb-8">
             <h1 className="font-display text-4xl font-bold text-white tracking-tight">
@@ -75,11 +72,19 @@ const IssuePage = () => {
               the community.
             </p>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-            {issues.map((issue, index) => (
-              <IssueMainCard key={index} issue={issue} />
-            ))}
+            {issues.length > 0 ? (
+              issues.map((issue) => (
+                <IssueMainCard key={issue._id} issue={issue} />
+              ))
+            ) : (
+              <p className="text-slate-500 col-span-full text-center py-10">
+                No issues found matching your criteria.
+              </p>
+            )}
           </div>
+
           <div className="mt-12 flex justify-center">
             <Pagination
               currentPage={currentPage}

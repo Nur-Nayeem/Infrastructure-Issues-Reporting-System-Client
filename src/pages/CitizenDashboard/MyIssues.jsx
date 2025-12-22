@@ -13,6 +13,7 @@ import MyIssueCard from "../../components/DashBoardComponents/myIssueCard/MyIssu
 import useAuth from "../../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import LoadingSpinner from "../../components/Shared/Loader";
 
 export const MyIssuesPage = () => {
   const [filtered, setFiltered] = useState("all");
@@ -20,7 +21,11 @@ export const MyIssuesPage = () => {
   const { user } = useAuth();
   const axiosSecureInstanse = useAxiosSecure();
 
-  const { data: issues = [], refetch } = useQuery({
+  const {
+    data: issues = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["my-issues", user?.email],
     queryFn: async () => {
       const res = await axiosSecureInstanse.get(`/my-issues/${user?.email}`);
@@ -48,6 +53,8 @@ export const MyIssuesPage = () => {
         return <FaTimesCircle className="text-red-400" />;
     }
   };
+
+  if (isLoading) return <LoadingSpinner />;
 
   return (
     <div className="max-w-7xl mx-auto p-6">
@@ -84,9 +91,9 @@ export const MyIssuesPage = () => {
               className="input-box"
             >
               <option value="all">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="in-progress">In Progress</option>
-              <option value="resolved">Resolved</option>
+              <option value="Pending">Pending</option>
+              <option value="In-Progress">In Progress</option>
+              <option value="Resolved">Resolved</option>
             </select>
           </div>
         </div>

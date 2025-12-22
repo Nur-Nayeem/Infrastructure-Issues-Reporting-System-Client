@@ -5,6 +5,7 @@ import useAxios from "../../hooks/useAxios";
 import useAuth from "../../hooks/useAuth";
 import IssuesListTableOfStaff from "../../components/DashBoardComponents/Tables/IssuesListTableOfStaff";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import LoadingSpinner from "../../components/Shared/Loader";
 
 export const StaffAssignedIssuesPage = () => {
   const [statusFilter, setStatusFilter] = useState("All");
@@ -12,7 +13,11 @@ export const StaffAssignedIssuesPage = () => {
   const axiosInstance = useAxios();
   const axiosSecureInstance = useAxiosSecure();
   const { user } = useAuth();
-  const { data: issues = [], refetch: refetchIssues } = useQuery({
+  const {
+    data: issues = [],
+    isLoading,
+    refetch: refetchIssues,
+  } = useQuery({
     queryKey: ["issues", user?.email],
     queryFn: async () => {
       const res = await axiosInstance.get(`/issues?assignedto=${user?.email}`);
@@ -35,6 +40,8 @@ export const StaffAssignedIssuesPage = () => {
       return false;
     return true;
   });
+
+  if (isLoading) return <LoadingSpinner />;
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto p-6">

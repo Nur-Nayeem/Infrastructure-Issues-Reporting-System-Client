@@ -2,10 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useMemo, useState } from "react";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import LoadingSpinner from "../../components/Shared/Loader";
 
 const AdminPaymentsPage = () => {
   const axiosSecureInstance = useAxiosSecure();
-  const { data: payments = [] } = useQuery({
+  const { data: payments = [], isLoading } = useQuery({
     queryKey: ["payments"],
     queryFn: async () => {
       const res = await axiosSecureInstance.get(`/payments`);
@@ -26,7 +27,7 @@ const AdminPaymentsPage = () => {
     });
   }, [payments, statusFilter, typeFilter]);
 
-  console.log(payments);
+  if (isLoading) return <LoadingSpinner />;
 
   return (
     <div className="bg-surface-dark rounded-xl border border-slate-800 overflow-hidden">

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { FaSearch, FaUserPlus } from "react-icons/fa";
 import DeleteStaffModal from "../../components/DashBoardComponents/modals/DeleteStaffModal";
 import EditStaffModal from "../../components/DashBoardComponents/modals/EditStaffModal";
@@ -6,55 +7,56 @@ import StaffTable from "../../components/DashBoardComponents/Tables/StaffTable";
 import AddStaffModel from "../../components/DashBoardComponents/modals/AddStaffModel";
 import toast from "react-hot-toast";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import LoadingSpinner from "../../components/Shared/Loader";
 
 export const AdminManageStaffPage = () => {
   const [search, setSearch] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(null);
-  const [staff, setStaff] = useState([]);
-  const [refetch, setRefetch] = useState(false);
+
   const axiosSecureInstance = useAxiosSecure();
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    axiosSecureInstance.get("/staff").then((res) => setStaff(res.data));
-  }, [axiosSecureInstance, refetch]);
-
-  const handleEditStaff = async (updatedStaff) => {
-    try {
+  const { data: staff = [], isLoading } = useQuery({
+    queryKey: ["staff"],
+    queryFn: async () => {
+      const res = await axiosSecureInstance.get("/staff");
+      return res.data;
+    },
+  });
+  const editStaffMutation = useMutation({
+    mutationFn: async (updatedStaff) => {
       const { email, ...updateData } = updatedStaff;
-
-      await axiosSecureInstance.patch(`/staff/${email}`, updateData);
-
-      setStaff((prev) =>
-        prev.map((item) =>
-          item.email === email ? { ...item, ...updateData } : item
-        )
-      );
-
+      return axiosSecureInstance.patch(`/staff/${email}`, updateData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["staff"]);
       toast.success("Staff updated successfully");
       setShowEditModal(null);
-    } catch {
-      toast.error("Failed to update staff");
-    }
-  };
+    },
+    onError: () => toast.error("Failed to update staff"),
+  });
 
-  const handleDeleteStaff = async (email) => {
-    try {
-      await axiosSecureInstance.delete(`/staff/${email}`);
-      setStaff((prev) => prev.filter((item) => item.email !== email));
+  const deleteStaffMutation = useMutation({
+    mutationFn: async (email) => {
+      return axiosSecureInstance.delete(`/staff/${email}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["staff"]);
       toast.success("Staff deleted");
       setShowDeleteModal(null);
-    } catch {
-      toast.error("Delete failed");
-    }
-  };
+    },
+    onError: () => toast.error("Delete failed"),
+  });
 
   const filteredStaff = staff.filter(
     (m) =>
       m.displayName?.toLowerCase().includes(search.toLowerCase()) ||
       m.email?.toLowerCase().includes(search.toLowerCase())
   );
+
+  if (isLoading) return <LoadingSpinner />;
 
   return (
     <div>
@@ -69,7 +71,7 @@ export const AdminManageStaffPage = () => {
             <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
             <input
               type="text"
-              placeholder="Search issues..."
+              placeholder="Search staff..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="input-box"
@@ -93,8 +95,8 @@ export const AdminManageStaffPage = () => {
       {showAddModal && (
         <AddStaffModel
           setShowAddModal={setShowAddModal}
-          setRefetch={setRefetch}
-          refetch={refetch}
+          // Note: Inside AddStaffModel, you should now call
+          // queryClient.invalidateQueries(["staff"]) after a successful POST
         />
       )}
 
@@ -102,7 +104,7 @@ export const AdminManageStaffPage = () => {
         <EditStaffModal
           showEditModal={showEditModal}
           setShowEditModal={setShowEditModal}
-          handleEditStaff={handleEditStaff}
+          handleEditStaff={editStaffMutation.mutate} // Pass the mutation function
         />
       )}
 
@@ -110,7 +112,7 @@ export const AdminManageStaffPage = () => {
         <DeleteStaffModal
           showDeleteModal={showDeleteModal}
           setShowDeleteModal={setShowDeleteModal}
-          handleDeleteStaff={handleDeleteStaff}
+          handleDeleteStaff={deleteStaffMutation.mutate} // Pass the mutation function
         />
       )}
     </div>

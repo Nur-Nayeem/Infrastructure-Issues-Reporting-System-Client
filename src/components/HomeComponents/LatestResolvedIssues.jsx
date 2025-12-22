@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import IssueMainCard from "../cards/IssueMainCard";
 import useAxios from "../../hooks/useAxios";
 import { useQuery } from "@tanstack/react-query";
@@ -6,12 +6,7 @@ import LoadingSpinner from "../Shared/Loader";
 
 const LatestResolvedIssues = () => {
   const axiosInstance = useAxios();
-  const {
-    data: latesSolved = [],
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
+  const { data: latesSolved = [], isLoading } = useQuery({
     queryKey: ["latestSolved"],
     queryFn: async () => {
       const res = await axiosInstance.get("/issues?status=Resolved&limit=6");

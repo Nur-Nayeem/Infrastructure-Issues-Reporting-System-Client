@@ -1,35 +1,49 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import BlockModal from "../../components/DashBoardComponents/modals/BlockModal";
 import UserTable from "../../components/DashBoardComponents/Tables/UserTable";
 import toast from "react-hot-toast";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import LoadingSpinner from "../../components/Shared/Loader";
 
 export const AdminManageUsersPage = () => {
   const [showBlockModal, setShowBlockModal] = useState(null);
-  const [refetch, setRefetch] = useState(false);
-
-  const [users, setUsers] = useState([]);
   const axiosSecureInstance = useAxiosSecure();
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    axiosSecureInstance
-      .get("/users?role=citizen")
-      .then((res) => setUsers(res.data));
-  }, [axiosSecureInstance, refetch]);
+  const {
+    data: users = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["users", "citizen"],
+    queryFn: async () => {
+      const res = await axiosSecureInstance.get("/users?role=citizen");
+      return res.data;
+    },
+  });
 
-  const toggleUserBlock = (email) => {
-    console.log(email);
+  const { mutate: toggleUserBlock } = useMutation({
+    mutationFn: async (email) => {
+      return axiosSecureInstance.patch(`/users/${email}/blocked`);
+    },
+    onSuccess: () => {
+      toast.success("User status updated successfully");
+      queryClient.invalidateQueries(["users", "citizen"]);
+      setShowBlockModal(null);
+    },
+    onError: (err) => {
+      toast.error(`Error: ${err.message}`);
+    },
+  });
 
-    axiosSecureInstance
-      .patch(`/users/${email}/blocked`)
-      .then(() => {
-        toast.success(`success`);
-        setRefetch(!refetch);
-      })
-      .catch((err) => {
-        toast.error("Error", err);
-      });
-  };
+  if (isLoading) return <LoadingSpinner />;
+
+  if (isError) {
+    return (
+      <div className="p-10 text-center text-red-500">Failed to load users.</div>
+    );
+  }
 
   return (
     <div>
@@ -53,7 +67,7 @@ export const AdminManageUsersPage = () => {
         <BlockModal
           setShowBlockModal={setShowBlockModal}
           showBlockModal={showBlockModal}
-          toggleUserBlock={toggleUserBlock}
+          toggleUserBlock={toggleUserBlock} // Now using the mutation function
         />
       )}
     </div>

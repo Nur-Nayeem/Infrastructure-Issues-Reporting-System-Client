@@ -1,4 +1,4 @@
-import React, { use } from "react";
+import React from "react";
 import {
   FaChartBar,
   FaCreditCard,
@@ -12,10 +12,10 @@ import {
 
 import { NavLinkItem } from "./NavLink";
 import { Logo } from "../../Logo/Logo";
-import { AuthContext } from "../../../context/Contexts";
+import useAuth from "../../../hooks/useAuth";
 
 const SideBar = ({ setSidebarOpen, sidebarOpen, user }) => {
-  const { logOutUSer } = use(AuthContext);
+  const { logOutUSer } = useAuth();
   let menuItems;
   if (user?.role === "citizen") {
     menuItems = [
@@ -100,11 +100,20 @@ const SideBar = ({ setSidebarOpen, sidebarOpen, user }) => {
         {/* User Info */}
         <div className={`p-4 border-b border-slate-700 bg-slate-700/30`}>
           <div className="flex items-center gap-3">
-            <div
-              className={`rounded-full bg-primary/20 flex items-center justify-center text-primary p-4`}
-            >
-              <FaUser className="w-4 h-4" />
-            </div>
+            {user?.photoURL ? (
+              <img
+                src={user?.photoURL}
+                alt=""
+                className="rounded-full w-12 h-12"
+              />
+            ) : (
+              <div
+                className={`rounded-full bg-primary/20 flex items-center justify-center text-primary p-4`}
+              >
+                <FaUser className="w-4 h-4" />
+              </div>
+            )}
+
             <div>
               <h3 className="font-semibold text-slate-100 truncate">
                 {user?.displayName.split(" ")[0]}

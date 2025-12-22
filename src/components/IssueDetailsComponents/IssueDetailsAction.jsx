@@ -3,6 +3,7 @@ import { BsLightningCharge } from "react-icons/bs";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import EditIssueModal from "../DashBoardComponents/modals/EditIssueModal";
+import useRole from "../../hooks/useRole";
 const IssueDetailsAction = ({
   issue,
   isOwner,
@@ -12,6 +13,7 @@ const IssueDetailsAction = ({
   handleBoostIssue,
 }) => {
   const [editIssuesModal, setEditIssuesModal] = useState(false);
+  const { role } = useRole();
   return (
     <>
       <div className="bg-surface-dark rounded-xl border border-slate-800 p-6 shadow-lg">
@@ -20,15 +22,17 @@ const IssueDetailsAction = ({
         </h3>
 
         <div className="space-y-3">
-          {issue.priority === "Low" && issue.status !== "Resolved" && (
-            <button
-              onClick={() => handleBoostIssue(issue._id)}
-              className="w-full py-3 px-4 bg-linear-to-r from-accent to-orange-600 hover:from-orange-500 hover:to-orange-700 text-white font-semibold rounded-lg shadow-lg flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5"
-            >
-              <BsLightningCharge />
-              Boost Priority (100tk)
-            </button>
-          )}
+          {issue.priority === "Low" &&
+            issue.status !== "Resolved" &&
+            role === "citizen" && (
+              <button
+                onClick={() => handleBoostIssue(issue._id)}
+                className="w-full py-3 px-4 bg-linear-to-r from-accent to-orange-600 hover:from-orange-500 hover:to-orange-700 text-white font-semibold rounded-lg shadow-lg flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5"
+              >
+                <BsLightningCharge />
+                Boost Priority (100tk)
+              </button>
+            )}
 
           {/* Edit/Delete */}
           {isOwner && isPending && (
