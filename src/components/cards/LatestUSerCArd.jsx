@@ -5,10 +5,10 @@ const LatestUSerCArd = ({ user }) => {
     <div className="p-4 hover:bg-slate-800/30 flex justify-between">
       <div className="flex items-center gap-3 mb-3">
         <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center">
-          <span className="text-slate-300">{user.name.charAt(0)}</span>
+          <span className="text-slate-300">{user.displayName.charAt(0)}</span>
         </div>
         <div>
-          <p className="font-medium text-slate-100">{user.name}</p>
+          <p className="font-medium text-slate-100">{user.displayName}</p>
           <p className="text-sm text-slate-400">{user.email}</p>
         </div>
       </div>

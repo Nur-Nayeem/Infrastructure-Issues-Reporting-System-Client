@@ -5,27 +5,29 @@ import toast from "react-hot-toast";
 import EditIssueModal from "../modals/EditIssueModal";
 import useUser from "../../../hooks/useUser";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import DeleteModal from "../modals/DeleteModal";
 
 const MyIssueCard = ({ issue, getStatusIcon, refetch }) => {
   const axiosSecureInstance = useAxiosSecure();
   const { currentUser } = useUser();
   const [editIssuesModal, setEditIssuesModal] = useState(false);
+  const queryClient = useQueryClient();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const handleDeleteIssue = () => {
-    if (!window.confirm("Are you sure you want to delete this issue?")) return;
+  const handleDeleteIssue = useMutation({
+    mutationFn: async () => {
+      return axiosSecureInstance.delete(`/issues/${issue._id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["issues"]);
+      toast.success("Issue deleted");
+      refetch();
+      setShowDeleteModal(false);
+    },
+    onError: () => toast.error("Delete failed"),
+  });
 
-    axiosSecureInstance
-      .delete(`/issues/${issue._id}`)
-      .then((res) => {
-        console.log(res);
-        toast.success("Deleted Issue");
-        refetch();
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error("Error To Delete");
-      });
-  };
   const handleBoostIssue = async (issueId, currentUser) => {
     const res = await axiosSecureInstance.post("/payment-checkout-session", {
       issueId,
@@ -102,7 +104,7 @@ const MyIssueCard = ({ issue, getStatusIcon, refetch }) => {
             )}
 
             <button
-              onClick={handleDeleteIssue}
+              onClick={() => setShowDeleteModal(true)}
               className="p-2 bg-primary/20 text-primary rounded-lg hover:bg-primary/30 cursor-pointer"
               title="Delete Issue"
             >
@@ -119,6 +121,15 @@ const MyIssueCard = ({ issue, getStatusIcon, refetch }) => {
         issue={issue}
         refetch={refetch}
       />
+      {showDeleteModal && (
+        <DeleteModal
+          showDeleteModal={showDeleteModal}
+          setShowDeleteModal={setShowDeleteModal}
+          handleDelete={handleDeleteIssue.mutate}
+          title={"Delete Issue"}
+          text={`Are you sure you want to delete this Issue?`}
+        />
+      )}
     </>
   );
 };

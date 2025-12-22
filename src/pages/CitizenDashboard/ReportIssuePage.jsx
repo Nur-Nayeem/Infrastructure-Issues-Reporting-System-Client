@@ -91,7 +91,7 @@ export const ReportIssuePage = () => {
 
       {/* Subscription Notice */}
       {!currentUser.isPremium && currentUser.issuesReported >= 3 && (
-        <UpgradeNotice />
+        <UpgradeNotice user={currentUser} />
       )}
 
       {!currentUser.isPremium && currentUser.issuesReported < 3 && (

@@ -9,7 +9,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const defaultAvatar = "https://i.ibb.co.com/B26DPRzZ/avater.jpg";
 
-const AddStaffModel = ({ setShowAddModal, setRefetch, refetch }) => {
+const AddStaffModel = ({ setShowAddModal, staffRefetch }) => {
   const axiosSecureInstance = useAxiosSecure();
 
   const {
@@ -55,7 +55,7 @@ const AddStaffModel = ({ setShowAddModal, setRefetch, refetch }) => {
       };
 
       await axiosSecureInstance.post("/create-staff", staffData);
-      setRefetch(!refetch);
+      staffRefetch();
       toast.success("Staff account created");
       setShowAddModal(false);
     } catch (err) {
@@ -178,7 +178,11 @@ const AddStaffModel = ({ setShowAddModal, setRefetch, refetch }) => {
                 placeholder="Enter password"
                 {...register("password", {
                   required: "Password required",
-                  minLength: { value: 6, message: "Min 6 characters" },
+                  pattern: {
+                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{6,}$/,
+                    message:
+                      "Password must be at least 6 characters and include uppercase, lowercase, and special character",
+                  },
                 })}
               />
               {errors.password && (

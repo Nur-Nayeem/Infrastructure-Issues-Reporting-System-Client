@@ -4,13 +4,16 @@ import { MdOutlineModeEdit } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import EditIssueModal from "../DashBoardComponents/modals/EditIssueModal";
 import useRole from "../../hooks/useRole";
+import DeleteModal from "../DashBoardComponents/modals/DeleteModal";
 const IssueDetailsAction = ({
   issue,
   isOwner,
   isPending,
-  handleDelete,
+  handleIssueDelete,
   refetchDetails,
   handleBoostIssue,
+  showDeleteModal,
+  setShowDeleteModal,
 }) => {
   const [editIssuesModal, setEditIssuesModal] = useState(false);
   const { role } = useRole();
@@ -45,7 +48,7 @@ const IssueDetailsAction = ({
                 Edit Issue
               </button>
               <button
-                onClick={handleDelete}
+                onClick={() => setShowDeleteModal(true)}
                 className="w-full py-2.5 px-4 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
               >
                 <RiDeleteBin6Line />
@@ -68,6 +71,15 @@ const IssueDetailsAction = ({
         issue={issue}
         refetch={refetchDetails}
       />
+      {showDeleteModal && (
+        <DeleteModal
+          showDeleteModal={showDeleteModal}
+          setShowDeleteModal={setShowDeleteModal}
+          handleDelete={handleIssueDelete.mutate}
+          title={"Delete Issue"}
+          text={`Are you sure you want to delete this Issue?`}
+        />
+      )}
     </>
   );
 };

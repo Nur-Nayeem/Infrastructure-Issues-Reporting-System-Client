@@ -3,7 +3,6 @@ import { MdDashboard, MdLogout, MdMenu, MdClose } from "react-icons/md";
 import { Link, NavLink } from "react-router";
 import { AuthContext } from "../../context/Contexts";
 import { Logo } from "../Logo/Logo";
-import { LuX } from "react-icons/lu";
 const Navbar = ({ open, setOpen }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navLinks = [
@@ -98,15 +97,11 @@ const Navbar = ({ open, setOpen }) => {
 
       {/* Mobile Menu (No Design Change – Same Links) */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-surface-dark z-50 transform transition-transform duration-300 lg:hidden
+        className={`fixed top-16 left-0 h-full w-64 bg-surface-dark z-50 transform transition-transform duration-300 lg:hidden
         ${menuOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
-        <div className="relative px-6 py-10 bg-surface-dark rounded-2xl">
-          <LuX
-            className="absolute right-4 text-2xl cursor-pointer"
-            onClick={() => setMenuOpen(false)}
-          />
-          <div className="flex flex-col justify-center items-center gap-6 mt-10">
+        <div className="relative p-6 bg-surface-dark rounded-2xl">
+          <div className="flex flex-col justify-center items-center gap-6">
             {navLinks.map((link) => (
               <NavLink
                 key={link.to}

@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { FaSearch, FaUserPlus } from "react-icons/fa";
-import DeleteStaffModal from "../../components/DashBoardComponents/modals/DeleteStaffModal";
 import EditStaffModal from "../../components/DashBoardComponents/modals/EditStaffModal";
 import StaffTable from "../../components/DashBoardComponents/Tables/StaffTable";
 import AddStaffModel from "../../components/DashBoardComponents/modals/AddStaffModel";
 import toast from "react-hot-toast";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import LoadingSpinner from "../../components/Shared/Loader";
+import DeleteModal from "../../components/DashBoardComponents/modals/DeleteModal";
 
 export const AdminManageStaffPage = () => {
   const [search, setSearch] = useState("");
@@ -18,7 +18,11 @@ export const AdminManageStaffPage = () => {
   const axiosSecureInstance = useAxiosSecure();
   const queryClient = useQueryClient();
 
-  const { data: staff = [], isLoading } = useQuery({
+  const {
+    data: staff = [],
+    isLoading,
+    refetch: staffRefetch,
+  } = useQuery({
     queryKey: ["staff"],
     queryFn: async () => {
       const res = await axiosSecureInstance.get("/staff");
@@ -33,6 +37,7 @@ export const AdminManageStaffPage = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(["staff"]);
       toast.success("Staff updated successfully");
+      staffRefetch();
       setShowEditModal(null);
     },
     onError: () => toast.error("Failed to update staff"),
@@ -45,6 +50,7 @@ export const AdminManageStaffPage = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(["staff"]);
       toast.success("Staff deleted");
+      staffRefetch();
       setShowDeleteModal(null);
     },
     onError: () => toast.error("Delete failed"),
@@ -95,6 +101,7 @@ export const AdminManageStaffPage = () => {
       {showAddModal && (
         <AddStaffModel
           setShowAddModal={setShowAddModal}
+          staffRefetch={staffRefetch}
           // Note: Inside AddStaffModel, you should now call
           // queryClient.invalidateQueries(["staff"]) after a successful POST
         />
@@ -109,10 +116,13 @@ export const AdminManageStaffPage = () => {
       )}
 
       {showDeleteModal && (
-        <DeleteStaffModal
+        <DeleteModal
           showDeleteModal={showDeleteModal}
           setShowDeleteModal={setShowDeleteModal}
-          handleDeleteStaff={deleteStaffMutation.mutate} // Pass the mutation function
+          handleDelete={deleteStaffMutation.mutate}
+          title={"Delete Staff Member"}
+          text={`Are you sure you want to delete this staff member? This action cannot
+          be undone. All assigned issues will need to be reassigned.`}
         />
       )}
     </div>

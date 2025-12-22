@@ -8,19 +8,18 @@ const axiosInstance = axios.create({
 
 const useAxiosSecure = () => {
   const { user } = useAuth();
-  useEffect(() => {
-    const requestInterceptor = axiosInstance.interceptors.request.use(
-      (config) => {
-        config.headers.Authorization = `Bearer ${user?.accessToken}`;
-        return config;
-      }
-    );
 
-    return () => {
-      axiosInstance.interceptors.request.eject(requestInterceptor);
-    };
+  useEffect(() => {
+    const interceptor = axiosInstance.interceptors.request.use((config) => {
+      if (user?.accessToken) {
+        config.headers.Authorization = `Bearer ${user.accessToken}`;
+      }
+      return config;
+    });
+    return () => axiosInstance.interceptors.request.eject(interceptor);
   }, [user?.accessToken]);
 
   return axiosInstance;
 };
+
 export default useAxiosSecure;

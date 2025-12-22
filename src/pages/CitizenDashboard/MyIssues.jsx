@@ -32,7 +32,6 @@ export const MyIssuesPage = () => {
       return res.data;
     },
   });
-  console.log(issues);
 
   const filteredIssues = issues.filter((issue) => {
     if (filtered !== "all" && issue.status !== filtered) return false;

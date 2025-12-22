@@ -30,12 +30,11 @@ export const AdminDashboardPage = () => {
   const { data: users = [] } = useQuery({
     queryKey: ["users", "active", "citizen"],
     queryFn: async () => {
-      const res = await axiosSecureInstance.get(
-        `/users?status=active&role=citizen`
-      );
+      const res = await axiosSecureInstance.get(`/users?role=citizen`);
       return res.data;
     },
   });
+
   const { data: staff = [] } = useQuery({
     queryKey: ["users", "active", "staff"],
     queryFn: async () => {
@@ -57,7 +56,6 @@ export const AdminDashboardPage = () => {
   const latestIssues = [...issues]
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 3);
-
   const latestUsers = [...users]
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 3);

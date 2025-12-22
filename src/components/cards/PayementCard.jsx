@@ -23,11 +23,6 @@ const PayementCard = ({ payment }) => {
           </p>
         </div>
       </div>
-      <div className="flex items-center justify-between">
-        <button className="text-xs text-slate-400 hover:text-slate-300">
-          View Details
-        </button>
-      </div>
     </div>
   );
 };

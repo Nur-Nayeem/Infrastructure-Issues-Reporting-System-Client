@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { BsLightningCharge } from "react-icons/bs";
 import { FaChevronLeft } from "react-icons/fa";
@@ -8,7 +8,12 @@ import AsssignStaff from "../../components/IssueDetailsComponents/AsssignStaff";
 import DetailsContent from "../../components/IssueDetailsComponents/DetailsContent";
 import useUser from "../../hooks/useUser";
 import useAxios from "../../hooks/useAxios";
-import { useQuery } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
@@ -19,6 +24,8 @@ const IssueDetails = () => {
   const { user } = useAuth();
   const axiosInstance = useAxios();
   const axiosSecureInstance = useAxiosSecure();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const queryClient = useQueryClient();
   const { id } = useParams();
 
   const {
@@ -74,21 +81,18 @@ const IssueDetails = () => {
     }
   };
 
-  const handleDeleteIssue = () => {
-    if (!window.confirm("Are you sure you want to delete this issue?")) return;
-
-    axiosSecureInstance
-      .delete(`/issues/${issue._id}`)
-      .then((res) => {
-        console.log(res);
-        toast.success("Deleted Issue");
-        navigate("/all-issues");
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error("Error To Delete");
-      });
-  };
+  const handleDeleteIssue = useMutation({
+    mutationFn: async () => {
+      return axiosSecureInstance.delete(`/issues/${issue._id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["issues"]);
+      toast.success("Issue deleted");
+      navigate("/all-issues");
+      setShowDeleteModal(false);
+    },
+    onError: () => toast.error("Delete failed"),
+  });
 
   const handleBoostIssue = async (issueId) => {
     const res = await axiosSecureInstance.post("/payment-checkout-session", {
@@ -157,7 +161,9 @@ const IssueDetails = () => {
             issue={issue}
             isOwner={isOwner}
             isPending={isPending}
-            handleDelete={handleDeleteIssue}
+            handleIssueDelete={handleDeleteIssue}
+            showDeleteModal={showDeleteModal}
+            setShowDeleteModal={setShowDeleteModal}
             refetchDetails={refetchDetails}
             handleBoostIssue={handleBoostIssue}
           />

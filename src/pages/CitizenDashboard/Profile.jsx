@@ -71,37 +71,31 @@ export const ProfilePage = () => {
       const data = Object.fromEntries(formData);
 
       let imgUrl = null;
-
       if (fileImg) {
         imgUrl = await imageUpload(fileImg);
         if (!imgUrl) {
-          toast.error("Image upload failed. Try again.");
+          toast.error("Image upload failed.");
           setLoading(false);
           return;
         }
       }
 
-      const finalData = {
-        ...data,
-        ...(imgUrl && { photoURL: imgUrl }),
-      };
+      const finalData = { ...data, ...(imgUrl && { photoURL: imgUrl }) };
 
+      // PATCH to new endpoint
+      await axiosSecureInstance.patch("/users/update", finalData);
+
+      // Update Firebase profile
       await updateUserProfile(
         data.name || user.displayName,
         imgUrl || user.photoURL
       );
 
-      await axiosSecureInstance.patch(
-        `/users/update/${user?.email}`,
-        finalData
-      );
-
       await refetchUser();
-
       toast.success("Profile updated successfully!");
     } catch (err) {
       console.error(err);
-      toast.error("Error updating profile. Please try again.");
+      toast.error("Error updating profile.");
     } finally {
       setLoading(false);
     }
